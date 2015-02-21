@@ -1,0 +1,48 @@
+{
+  "name": "multic",
+  "version": "0.1.0",
+  "description": "node.js compiler and minifier API for various web sources: jade, html, sass/scss, css, coffee-script, es6/6to5, javascript/es5, html2js",
+  "main": "js/multic.js",
+  "scripts": {
+    "test": "make test"
+  },
+  "dependencies": {
+    "6to5": "^3.6.5",
+    "clean-css": "^3.0.10",
+    "coffee-script": "^1.9.1",
+    "jade": "^1.9.2",
+    "minimize": "^1.2.0",
+    "ng-html2js": "^2.0.0",
+    "node-sass": "^2.0.1",
+    "uglify-js": "^2.4.16"
+  },
+  "devDependencies": {
+    "coffee-script": "1.9.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/gvarsanyi/multic.git"
+  },
+  "keywords": [
+    "compiler",
+    "api",
+    "jade",
+    "html",
+    "css",
+    "scss",
+    "sass",
+    "coffee",
+    "coffee-script",
+    "es6",
+    "ecmascript",
+    "html2js",
+    "js",
+    "javascript"
+  ],
+  "author": "Greg Varsanyi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gvarsanyi/multic/issues"
+  },
+  "homepage": "https://github.com/gvarsanyi/multic"
+}
