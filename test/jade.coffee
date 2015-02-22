@@ -19,22 +19,22 @@ html(lang="en")
 
 async_tests =
   'html': (next) ->
-    multic.jade(code).html (err, compiled, includes, warnings) ->
+    multic.jade(code).html (err, res) ->
       if err
         return error err
-      if compiled.indexOf('(lang=') > -1
+      if res.compiled.indexOf('(lang=') > -1
         return error 'Compilation error #1'
-      unless compiled.split('>').length > 5
+      unless res.compiled.split('>').length > 5
         return error 'Compilation error #2'
-      unless compiled.indexOf('    <h1') > -1
+      unless res.compiled.indexOf('    <h1') > -1
         return error 'Not pretty'
       next()
 
   'html.min': (next) ->
-    multic.jade(code).html.min (err, compiled, minified, includes, warnings) ->
+    multic.jade(code).html.min (err, res) ->
       if err
         return error err
-      if minified.indexOf('    <h1') > -1
+      if res.minified.indexOf('    <h1') > -1
         return error 'Remained pretty'
       next()
 

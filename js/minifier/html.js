@@ -4,10 +4,7 @@ var minifier;
 minifier = require('minimize');
 
 module.exports = function(inf, cb) {
-  var err, error, minify_fn;
-  error = function(err) {
-    return cb(err);
-  };
+  var err, minify_fn;
   try {
     minify_fn = new minifier({
       empty: true,
@@ -15,14 +12,16 @@ module.exports = function(inf, cb) {
       comments: true,
       conditionals: true
     });
-    return minify_fn.parse(inf.source, function(err, minified) {
+    minify_fn.parse(inf.source, function(err, minified) {
       if (err) {
-        return error(err);
+        inf.res.errors.push(err);
       }
-      return cb(null, minified);
+      inf.res.minified = minified;
+      return cb();
     });
   } catch (_error) {
     err = _error;
-    return error(err);
+    inf.res.errors.push(err);
   }
+  return cb();
 };

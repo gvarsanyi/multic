@@ -5,13 +5,17 @@ minifier = require('uglify-js');
 
 module.exports = function(inf, cb) {
   var err, minified;
+  minified = minifier.minify(inf.source, {
+    fromString: true
+  }).code;
   try {
-    minified = minifier.minify(inf.source, {
-      fromString: true
-    }).code;
-    return cb(null, minified);
+    if (err) {
+      inf.res.errors.push(err);
+    }
+    inf.res.minified = minified;
   } catch (_error) {
     err = _error;
-    return cb(err);
+    inf.res.errors.push(err);
   }
+  return cb();
 };

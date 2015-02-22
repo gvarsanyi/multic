@@ -4,23 +4,19 @@ var minifier;
 minifier = require('clean-css');
 
 module.exports = function(inf, cb) {
-  var err, error, minified, ref, res, warnings;
-  error = function(err) {
-    console.log('EE', err.stack);
-    return cb(err);
-  };
+  var err, ref, ref1, ref2, ref3, res;
   try {
     res = (new minifier({})).minify(inf.source);
-    if (res != null ? (ref = res.errors) != null ? ref.length : void 0 : void 0) {
-      return error(res.errors);
+    if (res != null ? (ref = res.warnings) != null ? ref.length : void 0 : void 0) {
+      (ref1 = inf.res.warnings).push.apply(ref1, res.warnings);
     }
-    if (!(minified = res != null ? res.styles : void 0)) {
-      return error(new Error('Minification failed'));
+    if (res != null ? (ref2 = res.errors) != null ? ref2.length : void 0 : void 0) {
+      (ref3 = inf.res.errors).push.apply(ref3, res.errors);
     }
-    warnings = res != null ? res.warnings : void 0;
-    return cb(null, minified, warnings);
+    inf.res.minified = res != null ? res.styles : void 0;
   } catch (_error) {
     err = _error;
-    return error(err);
+    inf.res.errors.push(err);
   }
+  return cb();
 };

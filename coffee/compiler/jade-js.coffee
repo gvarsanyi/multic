@@ -5,19 +5,9 @@ html2js   = require './html-js'
 
 module.exports = (inf, cb) ->
 
-  jade2html inf, (err, compiled, includes1, warnings1) ->
-    if err
-      return cb err
+  jade2html inf, ->
+    if inf.res.errors.length
+      return cb()
 
-    inf.source = compiled
-    html2js inf, (err, compiled, includes2, warnings2) ->
-      if err
-        return cb err
-
-      if includes1?.length or includes2?.length
-        includes = (includes1 or []).concat includes2 or []
-
-      if warnings1?.length or warnings2?.length
-        warnings = (warnings1 or []).concat warnings2 or []
-
-      cb null, compiled, includes, warnings
+    inf.source = inf.res.compiled
+    html2js inf, cb

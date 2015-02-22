@@ -4,24 +4,22 @@ minifier = require 'clean-css'
 
 module.exports = (inf, cb) ->
 
-  error = (err) ->
-    # cb require('../error-parser') inf, err, line, desc
-    console.log 'EE', err.stack
-    cb err # TODO: error parsing
-
   try
     res = (new minifier {}).minify inf.source
 
+    if res?.warnings?.length
+      # TODO: warning parser
+      inf.res.warnings.push res.warnings...
+
     if res?.errors?.length
-      return error res.errors
+      # TODO: error parser
+      inf.res.errors.push res.errors...
 
-    unless minified = res?.styles
-      return error new Error 'Minification failed'
-
-    warnings = res?.warnings
-    # TODO process warnings
-
-    cb null, minified, warnings
+    inf.res.minified = res?.styles
 
   catch err
-    error err
+     # TODO: error parsing
+    inf.res.errors.push err
+
+  cb()
+

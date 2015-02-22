@@ -13,45 +13,49 @@ node.js compiler and minifier API for various web sources: jade, html, sass/scss
     multic._sourceType_(source)[._targetType_].min([options], callback)
 ### Callback signitures
 - __err__: null or Error instance
+- __res__: object
+#### Response object properties
 - __compiled__: compiled, unminified source
 - __minified__: minified source
-- __include_files__: null or Array of included files (for jade and sass)
-- __warnings__: null or Array of warnings
-
-#### Minification only
-    multic.js(script).min( function (err, minified[, warnings]) {}) ;
-#### Compilation only
-    multic.jade(script).html( function (err, compiled, include_files, warnings) {} );
-#### Compile + minify
-    multic.sass(script).css.min( function (err, compiled, minified, include_files, warnings) {} );
+- __includes__: Array of included files (for jade and sass)
+- __errors__: Array of errors
+- __warnings__: Array of warnings
 
 ## Examples
-## CoffeeScript to minified JavaScript
+### Concept
+#### Minification only
+    multic.js(script).min( function (err, res) {}) ;
+#### Compilation only
+    multic.jade(script).html( function (err, res) {} );
+#### Compile + minify
+    multic.sass(script).css.min( function (err, res) {} );
+
+### Full code example
     var multic = require('multic');
 
-    multic.coffee(coffee_source).js.min(function (err, compiled, minified, include_files, warnings) {
+    multic.coffee(coffee_source).js.min(function (err, res) {
       if (err) {
         console.error(err);
       } else {
-        console.log(minified);
+        console.log(res.minified);
       }
     });
 
     // jade to pretty html
-    multic.coffee(jade_source).html(function (err, compiled, include_files, warnings) {
+    multic.jade(jade_source).html(function (err, res) {
       if (err) {
         console.error(err);
       } else {
-        console.log('Compiled source:', compiled);
+        console.log('Compiled source:', res.compiled);
       }
     });
 
-    // jade to pretty html
-    multic.coffee(jade_source).html(function (err, compiled, include_files, warnings) {
+    // jade to angular module javascript
+    multic.jade(jade_source).js(function (err, res) {
       if (err) {
         console.error(err);
       } else {
-        console.log('Compiled source:', compiled);
+        console.log(res.compiled);
       }
     });
 

@@ -21,20 +21,20 @@ BODY {
 
 async_tests =
   'css': (next) ->
-    multic.sass(code).css (err, compiled, includes, warnings) ->
+    multic.sass(code).css (err, res) ->
       if err
         return error err
-      unless compiled.indexOf('color: #333;') > 1
+      unless res.compiled.indexOf('color: #333;') > 1
         return error 'Variable not resolved right'
       next()
 
   'css.min': (next) ->
-    multic.sass(code).css.min (err, compiled, minified, includes, warnings) ->
+    multic.sass(code).css.min (err, res) ->
       if err
         return error err
-      unless compiled.indexOf('color: #333;') > 1
+      unless res.compiled.indexOf('color: #333;') > 1
         return error 'Variable not resolved right'
-      unless minified.indexOf('{color:#333}') > 1
+      unless res.minified.indexOf('{color:#333}') > 1
         return error 'Variable not resolved right'
       next()
 

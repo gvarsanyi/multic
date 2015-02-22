@@ -1,13 +1,10 @@
 
-compiler = require 'node-sass'
-path     = require 'path'
+compiler     = require 'node-sass'
+error_parser = require '../error-parser'
+path         = require 'path'
 
 
 module.exports = (inf, cb) ->
-
-  error = (err) ->
-    cb err # TODO: error parsing
-#     cb require('../error-parser') inf, err, line, desc
 
   try
     stats = {}
@@ -18,13 +15,19 @@ module.exports = (inf, cb) ->
 
     compiler.render
       data:         inf.source
-      error:        error
       includePaths: pathes
       stats:        stats
+      error: (err) ->
+        inf.res.errors.push err
+        cb()
       success: (res) ->
-        unless (includes = res?.stats?.includedFiles)?.length
-          includes = null
-        cb null, res.css, includes # TODO , warnings
+        if (includes = res?.stats?.includedFiles)?.length
+          inf.res.includes.push includes...
+        # TODO warnings?
+        inf.res.compiled = res.css
+        cb()
 
   catch err
-    error err
+    # TODO error parsing
+    inf.res.errors.push err
+    cb()

@@ -16,21 +16,21 @@ var x = (a) => {
 
 async_tests =
   'js': (next) ->
-    multic.es6(code).js (err, compiled, includes, warnings) ->
+    multic.es6(code).js (err, res) ->
       if err
         return error err
-      if compiled.indexOf('=>') > 1
+      if res.compiled.indexOf('=>') > 1
         return error 'Compilation error'
-      if compiled.split('\n').length < 3
+      if res.compiled.split('\n').length < 3
         return error 'Not pretty'
       next()
 
   'js.min': (next) ->
-    multic.es6(code).js.min (err, compiled, minified, includes, warnings) ->
+    multic.es6(code).js.min (err, res) ->
       if err
         return error err
-      if minified.split('\n').length > 1
-        return error 'Remained pretty: ', minified
+      if res.minified.split('\n').length > 1
+        return error 'Remained pretty: ', res.minified
       next()
 
 

@@ -4,10 +4,6 @@ minifier = require 'minimize'
 
 module.exports = (inf, cb) ->
 
-  error = (err) ->
-    # cb require('../error-parser') inf, err, line, desc
-    cb err # TODO: error parsing
-
   try
     minify_fn = new minifier
       empty:        true # KEEP empty attributes
@@ -16,9 +12,18 @@ module.exports = (inf, cb) ->
       conditionals: true # KEEP conditional internet explorer comments
 
     minify_fn.parse inf.source, (err, minified) ->
+      # TODO warnings?
+
       if err
-        return error err
-      cb null, minified # TODO: , warnings
+        # TODO: error parsing
+        inf.res.errors.push err
+
+      inf.res.minified = minified
+
+      cb()
 
   catch err
-    error err
+     # TODO: error parsing
+    inf.res.errors.push err
+
+  cb()

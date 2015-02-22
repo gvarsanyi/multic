@@ -1,13 +1,17 @@
 
-compiler = require 'ng-html2js'
+compiler     = require 'ng-html2js'
+error_parser = require '../error-parser'
 
 
 module.exports = (inf, cb) ->
 
   try
-    compiled = compiler inf.file, inf.source # TODO: , module_name
-    cb null, compiled, null # TODO: warnings
+    inf.res.compiled = compiler inf.file, inf.source # TODO: , module_name
+
+    # TODO warnings?
 
   catch err
-    cb err
-#     cb require('../error-parser') inf, err, pos, desc
+    # TODO error parsing
+    inf.res.errors.push err
+
+  cb()

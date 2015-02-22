@@ -1,5 +1,6 @@
 
-compiler = require '6to5'
+compiler     = require '6to5'
+error_parser = require '../error-parser'
 
 
 module.exports = (inf, cb) ->
@@ -9,9 +10,9 @@ module.exports = (inf, cb) ->
     if inf.file
       parsed_opts.filename = inf.file
 
-    compiled = (compiler.transform inf.source, parsed_opts).code
+    inf.res.compiled = (compiler.transform inf.source, parsed_opts).code
 
-    cb null, compiled # TODO: includes, warnings
+    # TODO includes? warnings?
 
   catch err
     desc = String(err).split('\n')[0].split(':')[2 ...].join(':').trim()
@@ -25,4 +26,6 @@ module.exports = (inf, cb) ->
 
     pos = [line, err.loc?.column]
 
-    cb require('../error-parser') inf, err, pos, desc
+    inf.res.errors.push error_parser inf, err, pos, desc
+
+  cb()

@@ -1,17 +1,21 @@
 
-compiler = require 'jade'
+compiler     = require 'jade'
+error_parser = require '../error-parser'
 
 
 module.exports = (inf, cb) ->
 
   try
-    compiled = compiler.render inf.source,
+    inf.res.compiled = compiler.render inf.source,
       filename:     inf.file
       compileDebug: false
       pretty:       true
       includes:     (includes = [])
 
-    cb null, compiled, includes # TODO , warnings
+    if Array.isArray includes
+      inf.res.includes.push includes...
+
+    # TODO warnings?
 
   catch err
     desc = String(err).split('\n\n')[1 ...].join '\n\n'
@@ -23,4 +27,6 @@ module.exports = (inf, cb) ->
         line = line_n - 1
         break
 
-    cb require('../error-parser') inf, err, line, desc
+    inf.res.errors.push error_parser inf, err, line, desc
+
+  cb()
