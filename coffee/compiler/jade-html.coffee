@@ -46,7 +46,7 @@ module.exports = (inf, cb) ->
         desc = msg.substr 9, spos
 
         line = msg.substr(spos + 1).split(' ')[2]
-        pos = CompilationError.parsePos line, null, -1
+        pos = CompilationWarning.parsePos line, null, -1
 
         inf.res.warnings.push new CompilationWarning inf, msg, pos, desc
       else

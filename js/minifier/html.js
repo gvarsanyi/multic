@@ -17,8 +17,9 @@ module.exports = function(inf, cb) {
     minify_fn.parse(inf.source, function(err, minified) {
       if (err) {
         inf.res.errors.push(new MinificationError(inf, err));
+      } else {
+        inf.res.minified = minified;
       }
-      inf.res.minified = minified;
       return cb();
     });
   } catch (_error) {

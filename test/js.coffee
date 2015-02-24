@@ -27,6 +27,6 @@ test
     multic(code2, opts).js.min (err, res) ->
       unless err
         cb 'Missing error'
-      unless err.sourceLines?[err.line].indexOf('x = <-') > 1
-        cb 'Error code snippet is not a match:', err
+      unless err.sourceLines?[err.line].substr(err.column, 2) is '<-'
+        cb 'Error code snippet is not a match', err
       cb()

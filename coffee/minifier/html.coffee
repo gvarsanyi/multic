@@ -14,13 +14,12 @@ module.exports = (inf, cb) ->
 
     minify_fn.parse inf.source, (err, minified) ->
 
-      # minimize does not seem to support errors, so just in case
-      if err
+      if err # minimize does not seem to support errors, so just in case
         inf.res.errors.push new MinificationError inf, err
+      else
+        inf.res.minified = minified
 
       # minimize does not seem to support warnings
-
-      inf.res.minified = minified
 
       cb()
 

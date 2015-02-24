@@ -58,7 +58,7 @@ module.exports = function(inf, cb) {
       if (msg.substr(0, 9) === 'Warning: ' && ((spos = msg.indexOf(' for line ')) > -1 || (spos = msg.indexOf(' on line ')) > -1)) {
         desc = msg.substr(9, spos);
         line = msg.substr(spos + 1).split(' ')[2];
-        pos = CompilationError.parsePos(line, null, -1);
+        pos = CompilationWarning.parsePos(line, null, -1);
         return inf.res.warnings.push(new CompilationWarning(inf, msg, pos, desc));
       } else {
         return inf.res.warnings.push(new CompilationWarning(inf, msg));
@@ -88,6 +88,7 @@ module.exports = function(inf, cb) {
       break;
     }
     pos = CompilationError.parsePos(line, null, -1);
+    console.log('err', err);
     inf.res.errors.push(new CompilationError(inf, err, pos, desc));
   }
   return cb();

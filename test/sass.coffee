@@ -65,3 +65,12 @@ test
           unless res.compiled.indexOf('color: #f00;') > 1
             cb 'Import did not kick in'
           cb()
+
+  'error handling': (cb) ->
+    code2 = code + '\n   errorline}\n'
+    multic(code2, opts).sass.css (err, res) ->
+      unless err
+        cb 'Missing error'
+      unless err.sourceLines?[err.line].substr(err.column, 10) is 'errorline}'
+        cb 'Error code snippet is not a match:', err
+      cb()
