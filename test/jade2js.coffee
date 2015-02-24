@@ -14,7 +14,7 @@ opts = file: 'src/test.script.jade'
 
 test
   'js': (cb) ->
-    multic.jade(code).js opts, (err, res) ->
+    multic(code, opts).jade.js (err, res) ->
       if err
         cb err
       if res.compiled.indexOf('h1 Hello') > 1
@@ -24,7 +24,7 @@ test
       cb()
 
   'js.min': (cb) ->
-    multic.jade(code).js.min opts, (err, res) ->
+    multic(code, opts).jade.js.min (err, res) ->
       if err
         cb err
       if res.minified.split('\n').length > 1

@@ -2,6 +2,7 @@
 CompilationError   = require '../error/compilation-error'
 CompilationWarning = require '../warning/compilation-warning'
 compiler           = require 'jade'
+path               = require 'path'
 util               = require 'util'
 
 
@@ -9,22 +10,21 @@ util               = require 'util'
 compiler.Parser::_parseInclude = compiler.Parser::parseInclude
 compiler.Parser::parseInclude = ->
   if (list = @options?.includes) and typeof list is 'object'
-    tok  = @peek()
-    path = @resolvePath tok.val.trim(), 'include'
+    tok   = @peek()
+    fpath = @resolvePath tok.val.trim(), 'include'
 
-    p = require 'path'
-    file = p.resolve @filename
-    path = p.resolve path
+    file  = path.resolve @filename
+    fpath = path.resolve fpath
 
     if list instanceof Array
       for item in list
-        if item is path
+        if item is fpath
           return @_parseInclude()
-      list.push path
+      list.push fpath
     else
       list[file] ?= {}
-      list[file][path] ?= []
-      list[file][path].push tok.line
+      list[file][fpath] ?= []
+      list[file][fpath].push tok.line
 
   @_parseInclude()
 
@@ -41,15 +41,14 @@ module.exports = (inf, cb) ->
       msg = msg.join()
 
       if msg.substr(0, 9) is 'Warning: ' and
-      ((pos = msg.indexOf ' for line ') > -1 or
-       (pos = msg.indexOf ' on line ') > -1)
-        desc = msg.substr 9, pos
-        if isNaN line = Number msg.substr(pos + 1).split(' ')[2]
-          line = null
-        else
-          line -= 1
+      ((spos = msg.indexOf ' for line ') > -1 or
+       (spos = msg.indexOf ' on line ') > -1)
+        desc = msg.substr 9, spos
 
-        inf.res.warnings.push new CompilationWarning inf, msg, line, desc
+        line = msg.substr(spos + 1).split(' ')[2]
+        pos = CompilationError.parsePos line, null, -1
+
+        inf.res.warnings.push new CompilationWarning inf, msg, pos, desc
       else
         inf.res.warnings.push new CompilationWarning inf, msg
 
@@ -70,13 +69,12 @@ module.exports = (inf, cb) ->
 
     desc = String(err).split('\n\n')[1 ...].join '\n\n'
 
-    for err_line in String(err).split '\n'
-      if err_line.substr(0, 4) is '  > ' and
-      (line_n = String(err_line.substr(4).split('|')[0]).trim()) and
-      not isNaN line_n = Number line_n
-        line = line_n - 1
-        break
+    for err_line in String(err).split '\n' when err_line.substr(0, 4) is '  > '
+      line = String(err_line.substr(4).split('|')[0]).trim()
+      break
 
-    inf.res.errors.push new CompilationError inf, err, line, desc
+    pos = CompilationError.parsePos line, null, -1
+
+    inf.res.errors.push new CompilationError inf, err, pos, desc
 
   cb()

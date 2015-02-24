@@ -19,8 +19,8 @@ module.exports = (inf, cb) ->
 
     desc = String(err).split('\n')[0].split(':')[4 ...].join(':').trim()
 
-    if err.location?.first_line?
-      pos = [err.location?.first_line, err.location?.first_column]
+    pos = CompilationError.parsePos err.location?.first_line,
+                                    err.location?.first_column
 
     inf.res.errors.push new CompilationError inf, err, pos, desc
 

@@ -6,7 +6,7 @@ CompilationError = require('../error/compilation-error');
 compiler = require('6to5');
 
 module.exports = function(inf, cb) {
-  var c, desc, err, l, line, line_n, opts, pos, ref, ref1, ref2, ref3;
+  var c, desc, err, l, opts, pos, ref, ref1, ref2, ref3;
   try {
     opts = {};
     if (inf.file) {
@@ -21,10 +21,7 @@ module.exports = function(inf, cb) {
         desc = desc.substr(0, pos);
       }
     }
-    if (!isNaN(Number(line_n = (ref2 = err.loc) != null ? ref2.line : void 0))) {
-      line = line_n - 1;
-    }
-    pos = [line, (ref3 = err.loc) != null ? ref3.column : void 0];
+    pos = CompilationError.parsePos((ref2 = err.loc) != null ? ref2.line : void 0, (ref3 = err.loc) != null ? ref3.column : void 0, -1);
     inf.res.errors.push(new CompilationError(inf, err, pos, desc));
   }
   return cb();

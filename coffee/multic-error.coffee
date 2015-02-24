@@ -1,4 +1,10 @@
 
+intify = (n) ->
+  unless String(n) is String(n).replace /[^0-9]/, ''
+    return
+  n = Number n
+
+
 class MulticError extends Error
 
   column:      null
@@ -25,20 +31,27 @@ class MulticError extends Error
     if inf.file
       @file = inf.file
 
-    if String(line).indexOf('.') is -1 and
-    (not isNaN line_n = parseInt line, 10) and line_n >= 0
+    if (line_n = intify line)?
       @line = line_n
       from = Math.max 0, line_n - 5
       if (sourcelines = inf.source?.split('\n')[from .. line_n + 5])?.length
         for line_literal, i in sourcelines
           (@sourceLines ?= {})[from + i] = line_literal
 
-    if column? and String(column).indexOf('.') is -1 and
-    (not isNaN column_n = parseInt column, 10) and column_n >= 0
+    if (column_n = intify column)?
       @column = column_n
 
     @message = description or err?.message or (if err then String(err) else '')
     super @message
+
+
+  @parsePos: (line, column, line_off=0, column_off=0) ->
+    if (line_n = intify line)?
+      line_n += line_off
+      if (column_n = intify column)?
+        column_n += column_off
+      return [line_n, column_n]
+    null
 
 
 module.exports = MulticError

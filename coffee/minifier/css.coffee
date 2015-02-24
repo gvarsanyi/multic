@@ -1,5 +1,6 @@
 
-minifier = require 'clean-css'
+MinificationError = require '../error/minification-error'
+minifier          = require 'clean-css'
 
 
 module.exports = (inf, cb) ->
@@ -7,19 +8,17 @@ module.exports = (inf, cb) ->
   try
     res = (new minifier {}).minify inf.source
 
-    if res?.warnings?.length
-      # TODO: warning parser
-      inf.res.warnings.push res.warnings...
+    for err in res.errors or []
+      inf.res.errors.push new MinificationError inf, err
 
-    if res?.errors?.length
-      # TODO: error parser
-      inf.res.errors.push res.errors...
+    # actually, all returned warnings seem to be errors
+    for warn in res.warnings or []
+      inf.res.errors.push new MinificationError inf, warn
 
     inf.res.minified = res?.styles
 
   catch err
-     # TODO: error parsing
-    inf.res.errors.push err
+      inf.res.errors.push new MinificationError inf, err
 
   cb()
 

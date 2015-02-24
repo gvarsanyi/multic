@@ -9,7 +9,7 @@ test   = require '../simple-test'
 code = """
 doctype html
 html(lang="en")
-  head''
+  head
     title pageTitle
   body.class1.class2
     h1#id1.class3 xxx
@@ -26,11 +26,9 @@ opts = file: 'src/test.jade'
 
 test
   'html': (cb) ->
-    multic.jade(code).html opts, (err, res) ->
+    multic(code, opts).jade.html (err, res) ->
       if err
         cb err
-      unless res.warnings?[0]?.line is 2
-        cb 'Compilation error #1'
       if res.compiled.indexOf('(lang=') > -1
         cb 'Compilation error #1'
       unless res.compiled.split('>').length > 5
@@ -40,7 +38,7 @@ test
       cb()
 
   'html.min': (cb) ->
-    multic.jade(code).html.min opts, (err, res) ->
+    multic(code, opts).jade.html.min (err, res) ->
       if err
         cb err
       if res.minified.indexOf('    <h1') > -1
@@ -57,7 +55,7 @@ test
           cb err
 
         code2 = code + '\n    include ../tmp/_jadeinc\n'
-        multic.jade(code2).html opts, (err, res) ->
+        multic(code2, opts).jade.html (err, res) ->
           if err
             cb err
           unless res.compiled.indexOf('lang=') > -1
@@ -69,3 +67,23 @@ test
             unless path.isAbsolute res.includes[0]
               cb 'include path is not absolute:', res.includes[0]
           cb()
+
+  'error handling': (cb) ->
+    code2 = code + '\n    include testdir/nonexisting\n'
+    multic(code2, opts).jade.html (err, res) ->
+      unless err
+        cb 'Missing error'
+      unless err.sourceLines?[err.line].indexOf('include testdir/nonexist') > 1
+        cb 'Error code snippet is not a match:', err
+      cb()
+
+  'warning handling': (cb) ->
+    code2 = code + '\n    span"ee"\n'
+    multic(code2, opts).jade.html (err, res) ->
+      if err
+        cb err
+      unless (warn = res.warnings[0]) or res.warnings.length > 1
+        cb 'Should have received 1 warning'
+      unless warn.sourceLines?[warn.line].indexOf('span"ee"') > 1
+        cb 'Warning code snippet is not a match:', warn
+      cb()

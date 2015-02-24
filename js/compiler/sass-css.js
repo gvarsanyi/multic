@@ -17,18 +17,8 @@ module.exports = function(inf, cb) {
       includePaths: pathes,
       stats: stats,
       error: function(err) {
-        var col, line, pos;
-        if (isNaN(Number(line = err.line))) {
-          line = null;
-        } else {
-          line -= 1;
-          if (isNaN(Number(col = err.column))) {
-            col = null;
-          } else {
-            col -= 1;
-          }
-          pos = [line, col];
-        }
+        var pos;
+        pos = CompilationError.parsePos(err.line, err.column, -1, -1);
         inf.res.errors.push(new CompilationError(inf, err, pos));
         return cb();
       },

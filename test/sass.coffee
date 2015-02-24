@@ -29,7 +29,7 @@ opts = file: 'src/test.scss'
 
 test
   'css': (cb) ->
-    multic.sass(code).css opts, (err, res) ->
+    multic(code, opts).sass.css (err, res) ->
       if err
         cb err
       unless res.compiled.indexOf('color: #333;') > 1
@@ -37,7 +37,7 @@ test
       cb()
 
   'css.min': (cb) ->
-    multic.sass(code).css.min opts, (err, res) ->
+    multic(code, opts).sass.css.min (err, res) ->
       if err
         cb err
       unless res.compiled.indexOf('color: #333;') > 1
@@ -59,7 +59,7 @@ test
         code2[1] = '@import \'../tmp/_sassinc\';'
         code2 = code2.join '\n'
 
-        multic.sass(code2).css opts, (err, res) ->
+        multic(code2, opts).sass.css (err, res) ->
           if err
             cb err
           unless res.compiled.indexOf('color: #f00;') > 1

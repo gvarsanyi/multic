@@ -6,7 +6,7 @@ CompilationError = require('../error/compilation-error');
 compiler = require('coffee-script');
 
 module.exports = function(inf, cb) {
-  var desc, err, opts, pos, ref, ref1, ref2;
+  var desc, err, opts, pos, ref, ref1;
   try {
     opts = {
       bare: true
@@ -18,9 +18,7 @@ module.exports = function(inf, cb) {
   } catch (_error) {
     err = _error;
     desc = String(err).split('\n')[0].split(':').slice(4).join(':').trim();
-    if (((ref = err.location) != null ? ref.first_line : void 0) != null) {
-      pos = [(ref1 = err.location) != null ? ref1.first_line : void 0, (ref2 = err.location) != null ? ref2.first_column : void 0];
-    }
+    pos = CompilationError.parsePos((ref = err.location) != null ? ref.first_line : void 0, (ref1 = err.location) != null ? ref1.first_column : void 0);
     inf.res.errors.push(new CompilationError(inf, err, pos, desc));
   }
   return cb();

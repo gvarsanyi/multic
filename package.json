@@ -1,6 +1,6 @@
 {
   "name": "multic",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "node.js compiler and minifier API for various web sources: jade, html, sass/scss, css, coffee-script, es6/6to5, javascript/es5, html2js",
   "main": "js/multic.js",
   "scripts": {
@@ -38,7 +38,12 @@
     "ecmascript",
     "html2js",
     "js",
-    "javascript"
+    "javascript",
+    "minify",
+    "unified",
+    "standard",
+    "error",
+    "warning"
   ],
   "author": "Greg Varsanyi",
   "license": "ISC",

@@ -1,4 +1,8 @@
 
+fs   = require 'fs'
+path = require 'path'
+
+
 sources =
   coffee: ['js']
   css:    ['min']
@@ -33,48 +37,87 @@ opts_factory = (source, orig, cb) ->
   [opts, cb]
 
 
-for source, targets of sources
-  do (source, targets) ->
-    module.exports[source] = (compilable) ->
-      unless typeof compilable is 'string'
-        compilable = ''
+module.exports = (src, options) ->
+  unless typeof src is 'string'
+    err_arg0 = new Error 'Argument #1 `source` must be string type'
 
-      iface = {}
+  if options? and typeof options isnt 'object'
+    err_arg1 = new Error 'Argument #2 `options` must be object type'
+    options = {}
 
-      for target in targets
-        do (target) ->
-          compile = (opts, cb) ->
-            [opts, cb] = opts_factory compilable, opts, cb
-            if target is 'min'
-              require('./minifier/' + source) opts, ->
-                unless typeof opts.res.minified is 'string'
-                  opts.res.minified = ''
-                cb opts.res.errors[0], opts.res
-            else
-              require('./compiler/' + source + '-' + target) opts, ->
-                unless typeof opts.res.compiled is 'string'
-                  opts.res.compiled = ''
-                cb opts.res.errors[0], opts.res
+  opts = {}
+  for k, v of options or {}
+    opts[k] = v
 
-          unless target is 'min'
-            compile.min = (opts, cb) ->
-              [opts, cb] = opts_factory compilable, opts, cb
-              opts.res.xxx = 1
-              compile opts, ->
-                unless typeof opts.res.compiled is 'string'
-                  opts.res.compiled = ''
-                if opts.res.errors.length
-                  opts.res.minified = ''
-                  return cb opts.res.errors[0], opts.res
+  res = opts.res ?=
+    errors: errors = []
+    includes: []
+    warnings: []
 
-                opts.source = opts.res.compiled
-                minifier = require './minifier/' + target
-                minifier opts, ->
-                  unless typeof opts.res.minified is 'string'
-                    opts.res.minified = ''
-                  cb opts.res.errors[0], opts.res
+  if err_arg0
+    errors.push err_arg0
+  if err_arg1
+    errors.push err_arg1
 
-          iface[target] = compile
-      iface
 
-return
+  process = (code, compiled, minified, cb) ->
+    unless typeof cb is 'function'
+      throw new Error 'Argument #1 (only argument) must be a callback function'
+
+    if errors.length
+      return cb errors[0], res
+
+    # read
+    if code is null
+      opts.file = path.resolve src
+      return fs.readFile opts.file, {encoding: 'utf8'}, (err, code) ->
+        if err
+          errors.push err
+        else
+          res.source = code
+        process code, compiled, minified, cb
+
+    # compile
+    if compiled and typeof compiled is 'object'
+      {source, target} = compiled
+      opts.source ?= code
+      return require('./compiler/' + source + '-' + target) opts, ->
+        unless typeof res.compiled is 'string'
+          res.compiled = ''
+        process code, (compiled = res.compiled), minified, cb
+
+    # minify
+    if minified and typeof minified is 'object'
+      {source} = minified
+      if res.compiled
+        opts.source = res.compiled
+      opts.source ?= code
+      return require('./minifier/' + source) opts, ->
+        unless typeof res.minified is 'string'
+          res.minified = ''
+        process code, compiled, (minified = res.minified), cb
+
+    cb null, res
+
+
+  iface = {file: {}}
+  for source, targets of sources
+    for target in targets
+      do (source, target) ->
+        sfn = (iface[source] ?= {})[target] = (cb) ->
+          if target is 'min'
+            return process src, false, {source}, cb
+          process src, {source, target}, false, cb
+        unless target is 'min'
+          sfn.min = (cb) ->
+            process src, {source, target}, {source: target}, cb
+
+        ffn = (iface.file[source] ?= {})[target] = (cb) ->
+          if target is 'min'
+            return process null, false, {source}, cb
+          process null, {source, target}, false, cb
+        unless target is 'min'
+          ffn.min = (cb) ->
+            process null, {source, target}, {source: target}, cb
+
+  iface

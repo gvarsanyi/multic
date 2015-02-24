@@ -16,17 +16,10 @@ module.exports = (inf, cb) ->
       stats:        stats
 
       error: (err) ->
-        if isNaN Number line = err.line
-          line = null
-        else
-          line -= 1
-          if isNaN Number col = err.column
-            col = null
-          else
-            col -= 1
-          pos = [line, col]
+        pos = CompilationError.parsePos err.line, err.column, -1, -1
 
         inf.res.errors.push new CompilationError inf, err, pos
+
         cb()
 
       success: (res) ->

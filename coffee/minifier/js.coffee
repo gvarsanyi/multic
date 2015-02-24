@@ -1,21 +1,19 @@
 
-minifier = require 'uglify-js'
+MinificationError = require '../error/minification-error'
+minifier          = require 'uglify-js'
 
 
 module.exports = (inf, cb) ->
 
-  minified = minifier.minify(inf.source, {fromString: true}).code
   try
+    inf.res.minified = minifier.minify(inf.source, {fromString: true}).code
 
-    # TODO warnings?
-    if err
-      # TODO: error parsing
-      inf.res.errors.push err
-
-    inf.res.minified = minified
+    # uglify-js does not seem to support warnings
 
   catch err
-     # TODO: error parsing
-    inf.res.errors.push err
+
+    pos = MinificationError.parsePos err.line, err.col, -1
+
+    inf.res.errors.push new MinificationError inf, err, pos
 
   cb()

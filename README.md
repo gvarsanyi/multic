@@ -10,56 +10,41 @@ node.js compiler and minifier API for various web sources: jade, html, sass/scss
 # Usage
 
 ## Pattern
-    multic._sourceType_(source)[._targetType_].min([options], callback)
+    var multic = require('multic');
+
+    multic(source|path[, options])[.file].coffee|css|es6|html|jade|sass[.css|html|js][.min](callback);
+
+## Examples
+### Concept
+#### JavaScript string minification
+    multic(script, {file: 'my/file/name.js'}).js.min( function (err, res) {}) ;
+#### Jade file->HTML compilation
+    multic('my/jade/file.jade').file.jade.html( function (err, res) {} );
+#### Compile SASS file to CSS + minify
+    multic('my/sass/file.scss').file.sass.css.min( function (err, res) {} );
+#### Jade to Angular module JavaScript
+    multic('my/sass/file.scss').file.sass.css.min( function (err, res) {
+      if (err) {
+        console.error(err);
+      } else {
+        console.log('source:', res.source);
+        console.log('compiled:', res.compiled);
+        console.log('minified:', res.minified);
+      }
+    } );
+
 ### Callback signitures
 - __err__: null or Error instance
 - __res__: object
 #### Response object properties
-- __compiled__: compiled, unminified source
-- __minified__: minified source
+- __source__: source code (if file is read)
+- __compiled__: compiled, unminified source (if compiled)
+- __minified__: minified source (if minified)
 - __includes__: Array of included files (for jade and sass)
 - __errors__: Array of errors
 - __warnings__: Array of warnings
 
-## Examples
-### Concept
-#### Minification only
-    multic.js(script).min( function (err, res) {}) ;
-#### Compilation only
-    multic.jade(script).html( function (err, res) {} );
-#### Compile + minify
-    multic.sass(script).css.min( function (err, res) {} );
-
-### Full code example
-    var multic = require('multic');
-
-    multic.coffee(coffee_source).js.min(function (err, res) {
-      if (err) {
-        console.error(err);
-      } else {
-        console.log(res.minified);
-      }
-    });
-
-    // jade to pretty html
-    multic.jade(jade_source).html(function (err, res) {
-      if (err) {
-        console.error(err);
-      } else {
-        console.log('Compiled source:', res.compiled);
-      }
-    });
-
-    // jade to angular module javascript
-    multic.jade(jade_source).js(function (err, res) {
-      if (err) {
-        console.error(err);
-      } else {
-        console.log(res.compiled);
-      }
-    });
-
-# Consequent errors and warnings
+## Consequent errors and warnings
 Parsing errors from different kinds of compilers can be tricky. They have inconsistant error (although at times similar) error and warning messages.
 
 Jade for example (as of v1.9.2) would produce propriatery warnings on STDERR output even when called from the API.
@@ -73,7 +58,7 @@ Jade for example (as of v1.9.2) would produce propriatery warnings on STDERR out
 - __sourceLines__: (*object* or *null*) a snippet of the source code around the error/warning. Keys are line numbers, values are the lines (without the \n character at the end). 11 lines (error/warning line + 5 previous + 5 following lines) or less (when the line is near the start or end of file).
 
 
-## Featured compilers
+# Featured compilers
 - [coffee](https://www.npmjs.com/package/coffee-script) -> js
 - [es6](https://www.npmjs.com/package/6to5) -> js
 - [jade](https://www.npmjs.com/package/jade) -> html
@@ -86,8 +71,6 @@ Jade for example (as of v1.9.2) would produce propriatery warnings on STDERR out
 - javascript: [uglify-js](https://www.npmjs.com/package/uglify-js)
 - css: [clean-css](https://www.npmjs.com/package/clean-css)
 
-## Coming soon (TODO)
-- Compiling from file
-- Complete coverage for unified errors and warnings
+# Coming soon (TODO)
+- Output to file
 - Lint support (generate warnings)
-- Standard warnings and errors for minifiers

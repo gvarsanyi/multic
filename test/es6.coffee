@@ -15,7 +15,7 @@ opts = file: 'src/test.es6'
 
 test
   'js': (cb) ->
-    multic.es6(code).js opts, (err, res) ->
+    multic(code, opts).es6.js (err, res) ->
       if err
         cb err
       if res.compiled.indexOf('=>') > 1
@@ -25,9 +25,18 @@ test
       cb()
 
   'js.min': (cb) ->
-    multic.es6(code).js.min opts, (err, res) ->
+    multic(code, opts).es6.js.min (err, res) ->
       if err
         cb err
       if res.minified.split('\n').length > 1
         cb 'Remained pretty: ', res.minified
+      cb()
+
+  'error handling': (cb) ->
+    code2 = code + '\nvar x = -> {}\n'
+    multic(code2, opts).es6.js (err, res) ->
+      unless err
+        cb 'Missing error'
+      unless err.sourceLines?[err.line].indexOf('x = ->') > 1
+        cb 'Error code snippet is not a match:', err
       cb()

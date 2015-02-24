@@ -23,10 +23,7 @@ module.exports = (inf, cb) ->
       if (pos = desc.lastIndexOf ' (' + l + ':' + c + ')') > -1
         desc = desc.substr 0, pos
 
-    unless isNaN Number line_n = err.loc?.line
-      line = line_n - 1
-
-    pos = [line, err.loc?.column]
+    pos = CompilationError.parsePos err.loc?.line, err.loc?.column, -1
 
     inf.res.errors.push new CompilationError inf, err, pos, desc
 

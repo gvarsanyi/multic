@@ -1,5 +1,6 @@
 
-minifier = require 'minimize'
+MinificationError = require '../error/minification-error'
+minifier          = require 'minimize'
 
 
 module.exports = (inf, cb) ->
@@ -12,18 +13,18 @@ module.exports = (inf, cb) ->
       conditionals: true # KEEP conditional internet explorer comments
 
     minify_fn.parse inf.source, (err, minified) ->
-      # TODO warnings?
 
+      # minimize does not seem to support errors, so just in case
       if err
-        # TODO: error parsing
-        inf.res.errors.push err
+        inf.res.errors.push new MinificationError inf, err
+
+      # minimize does not seem to support warnings
 
       inf.res.minified = minified
 
       cb()
 
   catch err
-     # TODO: error parsing
-    inf.res.errors.push err
+    inf.res.errors.push new MinificationError inf, err
 
   cb()
