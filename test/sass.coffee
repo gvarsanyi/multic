@@ -1,9 +1,9 @@
 
+fs     = require 'fs'
+mkdirp = require 'mkdirp'
 multic = require '../js/multic'
-
-error = (msg...) ->
-  console.error '[FAIL]', msg...
-  process.exit 1
+path   = require 'path'
+test   = require '../simple-test'
 
 
 code = """
@@ -17,33 +17,51 @@ BODY {
 }
 """
 
-# DESC
+code_inc = """
+$primary-color: #f00;
 
-async_tests =
-  'css': (next) ->
-    multic.sass(code).css (err, res) ->
-      if err
-        return error err
-      unless res.compiled.indexOf('color: #333;') > 1
-        return error 'Variable not resolved right'
-      next()
+SPAN { font-size: 13px; }
+"""
 
-  'css.min': (next) ->
-    multic.sass(code).css.min (err, res) ->
+
+opts = file: 'src/test.scss'
+
+
+test
+  'css': (cb) ->
+    multic.sass(code).css opts, (err, res) ->
       if err
-        return error err
+        cb err
       unless res.compiled.indexOf('color: #333;') > 1
-        return error 'Variable not resolved right'
+        cb 'Variable not resolved right'
+      cb()
+
+  'css.min': (cb) ->
+    multic.sass(code).css.min opts, (err, res) ->
+      if err
+        cb err
+      unless res.compiled.indexOf('color: #333;') > 1
+        cb 'Variable not resolved right'
       unless res.minified.indexOf('{color:#333}') > 1
-        return error 'Variable not resolved right'
-      next()
+        cb 'Variable not resolved right'
+      cb()
 
+  'css with include': (cb) ->
+    mkdirp 'tmp/', {mode: '0777'}, (err) ->
+      if err
+        cb err
 
-next_async = ->
-  for name, test of async_tests
-    delete async_tests[name]
-    if test
-      console.log 'Running async test:', name
-      test next_async
-    return
-next_async()
+      fs.writeFile 'tmp/_sassinc.scss', code_inc, (err) ->
+        if err
+          cb err
+
+        code2 = code.split '\n'
+        code2[1] = '@import \'../tmp/_sassinc\';'
+        code2 = code2.join '\n'
+
+        multic.sass(code2).css opts, (err, res) ->
+          if err
+            cb err
+          unless res.compiled.indexOf('color: #f00;') > 1
+            cb 'Import did not kick in'
+          cb()

@@ -4,28 +4,28 @@ test   = require '../simple-test'
 
 
 code = """
-var x = (a) => {
-   return a + 1;
-}
+<div id='id1' class='class1'>
+  <h1>Hello</h1>
+</div>
 """
 
 
-opts = file: 'src/test.es6'
+opts = file: 'src/test.script.html'
 
 
 test
   'js': (cb) ->
-    multic.es6(code).js opts, (err, res) ->
+    multic.html(code).js opts, (err, res) ->
       if err
         cb err
-      if res.compiled.indexOf('=>') > 1
+      if res.compiled.indexOf('h1 Hello') > 1
         cb 'Compilation error'
       if res.compiled.split('\n').length < 3
         cb 'Not pretty'
       cb()
 
   'js.min': (cb) ->
-    multic.es6(code).js.min opts, (err, res) ->
+    multic.html(code).js.min opts, (err, res) ->
       if err
         cb err
       if res.minified.split('\n').length > 1

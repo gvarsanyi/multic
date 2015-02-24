@@ -1,9 +1,6 @@
 
 multic = require '../js/multic'
-
-error = (msg...) ->
-  console.error '[FAIL]', msg...
-  process.exit 1
+test   = require '../simple-test'
 
 
 code = """
@@ -11,35 +8,27 @@ x = (a) ->
   a + 1
 """
 
-# DESC
 
-async_tests =
-  'js': (next) ->
-    multic.coffee(code).js (err, res) ->
+opts = file: 'src/test.coffee'
+
+
+test
+  'js': (cb) ->
+    multic.coffee(code).js opts, (err, res) ->
       if err
-        return error err
+        cb err
       if res.compiled.indexOf('->') > 1
-        return error 'Compilation error'
+        cb 'Compilation error'
       if res.compiled.split('\n').length < 3
-        return error 'Not pretty'
-      next()
+        cb 'Not pretty'
+      cb()
 
-  'js.min': (next) ->
-    multic.coffee(code).js.min (err, res) ->
+  'js.min': (cb) ->
+    multic.coffee(code).js.min opts, (err, res) ->
       if err
-        return error err
+        cb err
       if res.compiled.indexOf('->') > 1
-        return error 'Compilation error'
+        cb 'Compilation error'
       if res.minified.split('\n').length > 1
-        return error 'Remained pretty: ', res.minified
-      next()
-
-
-next_async = ->
-  for name, test of async_tests
-    delete async_tests[name]
-    if test
-      console.log 'Running async test:', name
-      test next_async
-    return
-next_async()
+        cb 'Remained pretty: ', res.minified
+      cb()

@@ -1,20 +1,22 @@
 
-compiler     = require '6to5'
-error_parser = require '../error-parser'
+CompilationError = require '../error/compilation-error'
+compiler         = require '6to5'
 
 
 module.exports = (inf, cb) ->
 
   try
-    parsed_opts = {}
+    opts = {}
     if inf.file
-      parsed_opts.filename = inf.file
+      opts.filename = inf.file
 
-    inf.res.compiled = (compiler.transform inf.source, parsed_opts).code
+    inf.res.compiled = (compiler.transform inf.source, opts).code
 
-    # TODO includes? warnings?
+    # 6to5 does not seem to support warnings
+    # 6to5 does not have includes (not ones that would pull in contents anyway)
 
   catch err
+
     desc = String(err).split('\n')[0].split(':')[2 ...].join(':').trim()
 
     if (l = err.loc?.line)? and (c = err.loc?.column)?
@@ -26,6 +28,6 @@ module.exports = (inf, cb) ->
 
     pos = [line, err.loc?.column]
 
-    inf.res.errors.push error_parser inf, err, pos, desc
+    inf.res.errors.push new CompilationError inf, err, pos, desc
 
   cb()

@@ -1,9 +1,6 @@
 
 multic = require '../js/multic'
-
-error = (msg...) ->
-  console.error '[FAIL]', msg...
-  process.exit 1
+test   = require '../simple-test'
 
 
 code = """
@@ -11,33 +8,25 @@ code = """
   h1 Hello
 """
 
-# DESC
 
-async_tests =
-  'js': (next) ->
-    multic.jade(code).js (err, res) ->
+opts = file: 'src/test.script.jade'
+
+
+test
+  'js': (cb) ->
+    multic.jade(code).js opts, (err, res) ->
       if err
-        return error err
+        cb err
       if res.compiled.indexOf('h1 Hello') > 1
-        return error 'Compilation error'
+        cb 'Compilation error'
       if res.compiled.split('\n').length < 3
-        return error 'Not pretty'
-      next()
+        cb 'Not pretty'
+      cb()
 
-  'js.min': (next) ->
-    multic.jade(code).js.min (err, res) ->
+  'js.min': (cb) ->
+    multic.jade(code).js.min opts, (err, res) ->
       if err
-        return error err
+        cb err
       if res.minified.split('\n').length > 1
-        return error 'Remained pretty: ', res.minified
-      next()
-
-
-next_async = ->
-  for name, test of async_tests
-    delete async_tests[name]
-    if test
-      console.log 'Running async test:', name
-      test next_async
-    return
-next_async()
+        cb 'Remained pretty: ', res.minified
+      cb()
