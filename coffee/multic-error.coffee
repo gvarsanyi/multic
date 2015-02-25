@@ -33,13 +33,14 @@ class MulticError extends Error
 
     if (line_n = intify line)?
       @line = line_n
+
+      if (column_n = intify column)?
+        @column = column_n
+
       from = Math.max 0, line_n - 5
       if (sourcelines = inf.source?.split('\n')[from .. line_n + 5])?.length
         for line_literal, i in sourcelines
           (@sourceLines ?= {})[from + i] = line_literal
-
-    if (column_n = intify column)?
-      @column = column_n
 
     @message = description or err?.message or (if err then String(err) else '')
     super @message

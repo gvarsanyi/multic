@@ -8,7 +8,7 @@ module.exports = (inf, cb) ->
 
   try
     warn_level = {level: 'warn'}
-    cfg = # see option descriptions at http://jshint.com/docs/options/
+    cfg = # see option descriptions at http://www.coffeelint.org/#options
       camel_case_classes:           warn_level
       colon_assignment_spacing:     warn_level
       line_endings:                 warn_level

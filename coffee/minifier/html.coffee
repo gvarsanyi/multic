@@ -1,29 +1,33 @@
 
 MinificationError = require '../error/minification-error'
-minifier          = require 'minimize'
+minifier          = require 'html-minifier'
 
 
 module.exports = (inf, cb) ->
 
   try
-    minify_fn = new minifier
-      empty:        true # KEEP empty attributes
-      cdata:        true # KEEP CDATA from scripts
-      comments:     true # KEEP comments
-      conditionals: true # KEEP conditional internet explorer comments
+    cfg =
+      caseSensitive:             true
+      keepClosingSlash:          true
+      removeComments:            true
+      removeCommentsFromCDATA:   true
+      collapseWhitespace:        true
+      conservativeCollapse:      true
+      removeRedundantAttributes: true
+      minifyJS:                  true
+      minifyCSS:                 true
 
-    minify_fn.parse inf.source, (err, minified) ->
-
-      if err # minimize does not seem to support errors, so just in case
-        inf.res.errors.push new MinificationError inf, err
-      else
-        inf.res.minified = minified
-
-      # minimize does not seem to support warnings
-
-      cb()
+    inf.res.minified = minifier.minify inf.source, cfg
 
   catch err
-    inf.res.errors.push new MinificationError inf, err
+
+    if String(err).substr(0, 13) is 'Parse Error: '
+      desc = 'Parse Error'
+      if (part = String(err).substr 13).length and
+      (idx = inf.source.indexOf part) > -1
+        lines = inf.source.substr(0, idx).split '\n'
+        pos = [lines.length - 1, lines.pop().length]
+
+    inf.res.errors.push new MinificationError inf, err, pos, desc
 
   cb()

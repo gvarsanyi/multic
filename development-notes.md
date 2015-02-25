@@ -30,6 +30,9 @@ Watch out for these issues when changing processor versions!
 ## minify (html minifier)
 - Errors: no errors (does not even catch invalid HTML)
 
+## jshint vs coffeelint
+- *coffeelint* does not support arbitrary max_line_length, only 80
+- consequent indentation checks are not supported by *jshint*
 
 # Inconsistencies
 

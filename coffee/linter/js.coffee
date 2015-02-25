@@ -23,10 +23,9 @@ module.exports = (inf, cb) ->
       undef:        true
       unused:       true
 
-    # TODO figure out a way to make this consistent with coffee/jade
-    # if (indent = inf.indentation) and
-    # parseInt(indent, 10) is Number(indent) and indent > 0
-    #   cfg.indent = indent
+    if (indent = inf.indentation) and
+    parseInt(indent, 10) is Number(indent) and indent > 0
+      cfg.indent = indent
 
     if maxlen = inf.maxLength80
       cfg.maxlen = 80

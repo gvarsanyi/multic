@@ -11,9 +11,10 @@
     "clean-css": "^3.0.10",
     "coffee-script": "^1.9.1",
     "coffeelint": "^1.9.2",
+    "html-minifier": "^0.7.0",
+    "htmllint": "^0.2.3",
     "jade": "^1.9.2",
     "jshint": "^2.6.0",
-    "minimize": "^1.2.0",
     "ng-html2js": "^2.0.0",
     "node-sass": "^2.0.1",
     "uglify-js": "^2.4.16"
@@ -45,7 +46,8 @@
     "unified",
     "standard",
     "error",
-    "warning"
+    "warning",
+    "lint"
   ],
   "author": "Greg Varsanyi",
   "license": "ISC",

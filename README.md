@@ -32,17 +32,40 @@ node.js compiler and minifier API for various web sources: jade, html, sass/scss
         console.log('minified:', res.minified);
       }
     } );
+#### Lint only (syntax errors and warnings, no processing)
+    multic('my/js/file.js').file.js( function (err, res) { }
 
 ### Callback signitures
-- __err__: null or Error instance
-- __res__: object
+- __err__: null or Error instance (same as the first item in `res.errors`)
+- __res__: response object
 #### Response object properties
-- __source__: source code (if file is read)
-- __compiled__: compiled, unminified source (if compiled)
-- __minified__: minified source (if minified)
-- __includes__: Array of included files (for jade and sass)
-- __errors__: Array of errors
-- __warnings__: Array of warnings
+- __source__:
+  - content: source code
+  - type: string
+  - optional: only exists if file is read
+- __compiled__:
+  - content: compiled, unminified code
+  - type: string
+  - optional: only exists if compilation was requested
+- __minified__:
+  - content: minified code
+  - type: string
+  - optional: only exists if minification was requested
+- __includes__
+  - content: included files for jade and sass files with includes/import
+  - type: Array object
+  - default value: empty Array
+  - always created
+- __errors__: Array of errors (always exists)
+  - content: errors in consistent Error objects (see below)
+  - type: Array object
+  - default value: empty Array
+  - always created
+- __warnings__:
+  - content: warnings in consistent Error objects (see below)
+  - type: Array object
+  - default value: empty Array
+  - always created
 
 ## Options
 ### Add file path when compiling from string
@@ -53,7 +76,7 @@ This is useful for error messages and to define include path start point for jad
 ### Enforce 80 characters line length
     {maxLength80: true}
 
-## Consequent errors and warnings
+## Consequent Errors and Warnings
 Parsing errors from different kinds of compilers can be tricky. They have inconsistant error (although at times similar) error and warning messages.
 
 Jade for example (as of v1.9.2) would produce propriatery warnings on STDERR output even when called from the API.
@@ -66,7 +89,6 @@ Jade for example (as of v1.9.2) would produce propriatery warnings on STDERR out
 - __column__: (*number* or *null*) indication of error/warning column in line (0-based index, i.e. first column is column 0)
 - __sourceLines__: (*object* or *null*) a snippet of the source code around the error/warning. Keys are line numbers, values are the lines (without the \n character at the end). 11 lines (error/warning line + 5 previous + 5 following lines) or less (when the line is near the start or end of file).
 
-
 # Featured compilers
 - [coffee](https://www.npmjs.com/package/coffee-script) -> js
 - [es6](https://www.npmjs.com/package/6to5) -> js
@@ -76,11 +98,16 @@ Jade for example (as of v1.9.2) would produce propriatery warnings on STDERR out
 - [jade](https://www.npmjs.com/package/jade) -> html -> [AngularJS module](https://www.npmjs.com/package/ng-html2js) (js)
 
 ## Minifiers
-- html: [minimize](https://www.npmjs.com/package/minimize)
+- html: [html-minifier](https://www.npmjs.com/package/html-minifier)
 - javascript: [uglify-js](https://www.npmjs.com/package/uglify-js)
 - css: [clean-css](https://www.npmjs.com/package/clean-css)
+
+## Linters
+- coffee: [coffee-lint](https://www.npmjs.com/package/jshint)
+- html: [htmllint](https://www.npmjs.com/package/htmllint)
+- js & es6: [jshint](https://www.npmjs.com/package/jshint)
 
 # Coming soon (TODO)
 - Output to file
 - Lint only
-- Some lint/precheck for HTML and CSS
+- Some SASS and CSS

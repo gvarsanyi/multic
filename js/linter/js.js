@@ -8,7 +8,7 @@ LintWarning = require('../warning/lint-warning');
 linter = require('jshint').JSHINT;
 
 module.exports = function(inf, cb) {
-  var cfg, err, i, len, maxlen, msg, pos, ref, ref1, ref2, title;
+  var cfg, err, i, indent, len, maxlen, msg, pos, ref, ref1, ref2, title;
   try {
     cfg = {
       curly: true,
@@ -26,6 +26,9 @@ module.exports = function(inf, cb) {
       undef: true,
       unused: true
     };
+    if ((indent = inf.indentation) && parseInt(indent, 10) === Number(indent) && indent > 0) {
+      cfg.indent = indent;
+    }
     if (maxlen = inf.maxLength80) {
       cfg.maxlen = 80;
     }

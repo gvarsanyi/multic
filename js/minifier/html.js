@@ -3,28 +3,33 @@ var MinificationError, minifier;
 
 MinificationError = require('../error/minification-error');
 
-minifier = require('minimize');
+minifier = require('html-minifier');
 
 module.exports = function(inf, cb) {
-  var err, minify_fn;
+  var cfg, desc, err, idx, lines, part, pos;
   try {
-    minify_fn = new minifier({
-      empty: true,
-      cdata: true,
-      comments: true,
-      conditionals: true
-    });
-    minify_fn.parse(inf.source, function(err, minified) {
-      if (err) {
-        inf.res.errors.push(new MinificationError(inf, err));
-      } else {
-        inf.res.minified = minified;
-      }
-      return cb();
-    });
+    cfg = {
+      caseSensitive: true,
+      keepClosingSlash: true,
+      removeComments: true,
+      removeCommentsFromCDATA: true,
+      collapseWhitespace: true,
+      conservativeCollapse: true,
+      removeRedundantAttributes: true,
+      minifyJS: true,
+      minifyCSS: true
+    };
+    inf.res.minified = minifier.minify(inf.source, cfg);
   } catch (_error) {
     err = _error;
-    inf.res.errors.push(new MinificationError(inf, err));
+    if (String(err).substr(0, 13) === 'Parse Error: ') {
+      desc = 'Parse Error';
+      if ((part = String(err).substr(13)).length && (idx = inf.source.indexOf(part)) > -1) {
+        lines = inf.source.substr(0, idx).split('\n');
+        pos = [lines.length - 1, lines.pop().length];
+      }
+    }
+    inf.res.errors.push(new MinificationError(inf, err, pos, desc));
   }
   return cb();
 };

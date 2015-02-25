@@ -42,6 +42,9 @@ MulticError = (function(superClass) {
     }
     if ((line_n = intify(line)) != null) {
       this.line = line_n;
+      if ((column_n = intify(column)) != null) {
+        this.column = column_n;
+      }
       from = Math.max(0, line_n - 5);
       if ((ref1 = (sourcelines = (ref2 = inf.source) != null ? ref2.split('\n').slice(from, +(line_n + 5) + 1 || 9e9) : void 0)) != null ? ref1.length : void 0) {
         for (i = j = 0, len = sourcelines.length; j < len; i = ++j) {
@@ -49,9 +52,6 @@ MulticError = (function(superClass) {
           (this.sourceLines != null ? this.sourceLines : this.sourceLines = {})[from + i] = line_literal;
         }
       }
-    }
-    if ((column_n = intify(column)) != null) {
-      this.column = column_n;
     }
     this.message = description || (err != null ? err.message : void 0) || (err ? String(err) : '');
     MulticError.__super__.constructor.call(this, this.message);
