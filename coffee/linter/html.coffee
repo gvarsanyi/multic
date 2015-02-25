@@ -8,7 +8,6 @@ module.exports = (inf, cb) ->
 
   try
     cfg = # descriptions at: https://github.com/htmllint/htmllint/wiki/Options
-      'attr-name-style':    'dash'
       'attr-no-dup':         true
       'attr-no-unsafe-char': true
       'attr-quote-style':    'quoted' # TODO quote consistency
@@ -23,7 +22,6 @@ module.exports = (inf, cb) ->
       # 'spec-char-escape':    true # this also trigger warnings about spaces
       'tag-name-lowercase':  true
       'tag-name-match':      true
-      'tag-self-close':      true
       'indent-width':        false
 
     if (indent = inf.indentation) and
@@ -46,25 +44,10 @@ module.exports = (inf, cb) ->
       cb()
 
     error = (err) ->
-      console.log 'Y', err
       inf.res.errors.push new LintError inf, err
       cb()
 
     (linter inf.source, cfg).then success, error
-
-
-#     for msg in linter.data()?.errors or []
-#       pos = LintError.parsePos msg.line, msg.character, -1, -1
-#
-#       if msg.code is 'W117' and inf.allowGlobals
-#         continue
-#
-#       if msg.code?[0] is 'W'
-#         title = 'Lint Warning' + if msg.code then ' (' + msg.code + ')' else ''
-#         inf.res.warnings.push new LintWarning inf, msg, pos, msg.reason, title
-#       else
-#         title = 'Error' + if msg.code then ' (' + msg.code + ')' else ''
-#         inf.res.errors.push new LintError inf, msg, pos, msg.reason, title
 
   catch err
 

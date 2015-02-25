@@ -16,7 +16,7 @@ sources = {
   sass: ['css']
 };
 
-linters = ['coffee', 'es6', 'html', 'js'];
+linters = ['coffee', 'es6', 'html', 'jade', 'js'];
 
 opts_factory = function(source, orig, cb) {
   var k, opts, ref, v;

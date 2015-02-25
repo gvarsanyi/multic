@@ -5,8 +5,8 @@ jslinter = require('./js');
 
 module.exports = function(inf, cb) {
   inf.es6 = true;
-  return jslinter(inf, function(err, res) {
+  return jslinter(inf, function() {
     inf.es6 = false;
-    return cb(err, res);
+    return cb();
   });
 };

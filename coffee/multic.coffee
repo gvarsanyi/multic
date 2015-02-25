@@ -12,7 +12,7 @@ sources =
   js:     ['min']
   sass:   ['css']
 
-linters = ['coffee', 'es6', 'html', 'js']
+linters = ['coffee', 'es6', 'html', 'jade', 'js']
 
 
 opts_factory = (source, orig, cb) ->

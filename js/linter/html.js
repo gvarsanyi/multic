@@ -11,7 +11,6 @@ module.exports = function(inf, cb) {
   var cfg, err, error, indent, success;
   try {
     cfg = {
-      'attr-name-style': 'dash',
       'attr-no-dup': true,
       'attr-no-unsafe-char': true,
       'attr-quote-style': 'quoted',
@@ -25,7 +24,6 @@ module.exports = function(inf, cb) {
       'line-end-style': 'lf',
       'tag-name-lowercase': true,
       'tag-name-match': true,
-      'tag-self-close': true,
       'indent-width': false
     };
     if ((indent = inf.indentation) && parseInt(indent, 10) === Number(indent) && indent > 0) {
@@ -48,7 +46,6 @@ module.exports = function(inf, cb) {
       return cb();
     };
     error = function(err) {
-      console.log('Y', err);
       inf.res.errors.push(new LintError(inf, err));
       return cb();
     };

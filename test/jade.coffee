@@ -87,3 +87,14 @@ test
       unless warn.sourceLines?[warn.line].indexOf('span"ee"') > 1
         cb 'Warning code snippet is not a match:', warn
       cb()
+
+  'lint warnings': (cb) ->
+    code2 = code + '\n    IMG(src="1.jpg")\n'
+    multic(code2, opts).jade.html (err, res) ->
+      if err
+        cb err
+      unless (warn = res.warnings[0]) and res.warnings.length is 2
+        cb 'Should have received 1 warning'
+      unless warn.sourceLines?[warn.line].indexOf('IMG') > 1
+        cb 'Warning code snippet is not a match:', warn
+      cb()

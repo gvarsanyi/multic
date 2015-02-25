@@ -9,28 +9,33 @@ util               = require 'util'
 # patch jade to provide includes
 compiler.Parser::_parseInclude = compiler.Parser::parseInclude
 compiler.Parser::parseInclude = ->
-  if (list = @options?.includes) and typeof list is 'object'
+  if Array.isArray @options?.includes
     tok   = @peek()
-    fpath = @resolvePath tok.val.trim(), 'include'
+    ipath = path.resolve @resolvePath tok.val.trim(), 'include'
 
-    file  = path.resolve @filename
-    fpath = path.resolve fpath
-
-    if list instanceof Array
-      for item in list
-        if item is fpath
-          return @_parseInclude()
-      list.push fpath
-    else
-      list[file] ?= {}
-      list[file][fpath] ?= []
-      list[file][fpath].push tok.line
+    unless ipath in @options.includes
+      @options.includes.push ipath
 
   @_parseInclude()
 
 
+# expose parsed nodes
+compiler.Parser::_parseExpr = compiler.Parser::parseExpr
+compiler.Parser::parseExpr = ->
+  expr = @_parseExpr()
+
+  if Array.isArray @options?.nodes
+    @options?.nodes.push expr
+
+  expr
+
+
 
 module.exports = (inf, cb) ->
+
+  if inf.compiledJade?
+    inf.res.compiled = inf.compiledJade
+    return cb()
 
   try
     orig_warn = console.warn
@@ -52,12 +57,16 @@ module.exports = (inf, cb) ->
       else
         inf.res.warnings.push new CompilationWarning inf, msg
 
-
-    inf.res.compiled = compiler.render inf.source,
+    cfg =
       filename:     inf.file
       compileDebug: false
       pretty:       true
       includes:     (includes = [])
+
+    if Array.isArray inf.jadeNodes
+      cfg.nodes = inf.jadeNodes
+
+    inf.res.compiled = compiler.render inf.source, cfg
 
     console.warn = orig_warn
 

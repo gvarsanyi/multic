@@ -27,14 +27,23 @@ Watch out for these issues when changing processor versions!
   - many CSS syntax errors are not cought (they are either kept or skipped)
   - no line nor column indication
 
-## minify (html minifier)
-- Errors: no errors (does not even catch invalid HTML)
-
 ## jshint vs coffeelint
 - *coffeelint* does not support arbitrary max_line_length, only 80
 - consequent indentation checks are not supported by *jshint*
 
 # Inconsistencies
+
+## Linting
+### Jade
+- Should be sorted out to be an external library
+- Patches the compiler to expose nodes to parse them
+- Some of the rules are not finished yet (compared to htmllint), see `TODO` remarks in code
+
+### Coffee-JS/ES6
+- Some of the rules are not properly matching yet, see `TODO` remarks in code
+
+### SASS, CSS
+- No linting yet
 
 ## No warnings
 Only a few compilers/minifiers would produce warning level messages. The ones that do NOT feature warnings:
@@ -44,19 +53,16 @@ Only a few compilers/minifiers would produce warning level messages. The ones th
   - ng-html2js
 - Minifiers:
   - clean-css (produces warnings that are errors actually)
-  - minify
+  - html-minifier
   - uglify-js
 
 ## No errors
 A few processors just won't fail when needed:
 - ng-html2js (compiler)
 - clean-css (minifier) will provide some errors
-- minify (minifier)
 
 ### Has errors but no line numbers (thus no code snippets)
 - clean-css (minifier)
 
 ### Has errors and line numbers but no column information
-- jade errors
-- jade warnings
-
+- jade errors+warnings (for both compiler and linter)
