@@ -88,7 +88,6 @@ module.exports = function(inf, cb) {
       break;
     }
     pos = CompilationError.parsePos(line, null, -1);
-    console.log('err', err);
     inf.res.errors.push(new CompilationError(inf, err, pos, desc));
   }
   return cb();

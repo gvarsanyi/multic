@@ -44,6 +44,15 @@ node.js compiler and minifier API for various web sources: jade, html, sass/scss
 - __errors__: Array of errors
 - __warnings__: Array of warnings
 
+## Options
+### Add file path when compiling from string
+    file: *filepath_string*useful for
+This is useful for error messages and to define include path start point for jade and sass
+### Turn linting off
+    {lint: false}
+### Enforce 80 characters line length
+    {maxLength80: true}
+
 ## Consequent errors and warnings
 Parsing errors from different kinds of compilers can be tricky. They have inconsistant error (although at times similar) error and warning messages.
 
@@ -73,4 +82,5 @@ Jade for example (as of v1.9.2) would produce propriatery warnings on STDERR out
 
 # Coming soon (TODO)
 - Output to file
-- Lint support (generate warnings)
+- Lint only
+- Some lint/precheck for HTML and CSS

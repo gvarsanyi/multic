@@ -12,6 +12,8 @@ sources =
   js:     ['min']
   sass:   ['css']
 
+linters = ['coffee', 'es6', 'js']
+
 
 opts_factory = (source, orig, cb) ->
   if typeof orig is 'function' and not cb?
@@ -60,7 +62,7 @@ module.exports = (src, options) ->
     errors.push err_arg1
 
 
-  process = (code, compiled, minified, cb) ->
+  process = (lint_inf, compile_inf, minify_inf, cb) ->
     unless typeof cb is 'function'
       throw new Error 'Argument #1 (only argument) must be a callback function'
 
@@ -68,34 +70,37 @@ module.exports = (src, options) ->
       return cb errors[0], res
 
     # read
-    if code is null
+    unless opts.source?
       opts.file = path.resolve src
       return fs.readFile opts.file, {encoding: 'utf8'}, (err, code) ->
         if err
           errors.push err
         else
-          res.source = code
-        process code, compiled, minified, cb
+          opts.source = res.source = code
+        process lint_inf, compile_inf, minify_inf, cb
+
+    # lint
+    if lint_inf and lint_inf in linters and (opts.lint or not opts.lint?)
+      opts.lint = false
+      return require('./linter/' + lint_inf) opts, ->
+        process lint_inf, compile_inf, minify_inf, cb
 
     # compile
-    if compiled and typeof compiled is 'object'
-      {source, target} = compiled
-      opts.source ?= code
+    if compile_inf and not res.compiled?
+      {source, target} = compile_inf
       return require('./compiler/' + source + '-' + target) opts, ->
         unless typeof res.compiled is 'string'
           res.compiled = ''
-        process code, (compiled = res.compiled), minified, cb
+        process lint_inf, compile_inf, minify_inf, cb
 
     # minify
-    if minified and typeof minified is 'object'
-      {source} = minified
+    if minify_inf and not res.minified?
       if res.compiled
         opts.source = res.compiled
-      opts.source ?= code
-      return require('./minifier/' + source) opts, ->
+      return require('./minifier/' + minify_inf) opts, ->
         unless typeof res.minified is 'string'
           res.minified = ''
-        process code, compiled, (minified = res.minified), cb
+        process lint_inf, compile_inf, minify_inf, cb
 
     cb null, res
 
@@ -105,19 +110,21 @@ module.exports = (src, options) ->
     for target in targets
       do (source, target) ->
         sfn = (iface[source] ?= {})[target] = (cb) ->
+          opts.source = src
           if target is 'min'
-            return process src, false, {source}, cb
-          process src, {source, target}, false, cb
+            return process source, false, source, cb
+          process source, {source, target}, false, cb
         unless target is 'min'
           sfn.min = (cb) ->
-            process src, {source, target}, {source: target}, cb
+            opts.source = src
+            process source, {source, target}, target, cb
 
         ffn = (iface.file[source] ?= {})[target] = (cb) ->
           if target is 'min'
-            return process null, false, {source}, cb
-          process null, {source, target}, false, cb
+            return process source, false, source, cb
+          process source, {source, target}, false, cb
         unless target is 'min'
           ffn.min = (cb) ->
-            process null, {source, target}, {source: target}, cb
+            process source, {source, target}, target, cb
 
   iface

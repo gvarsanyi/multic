@@ -35,6 +35,16 @@ test
         cb 'Remained pretty: ', res.minified
       cb()
 
+  'error warning (from lint)': (cb) ->
+    code2 = code + '\ny = () ->\n'
+    multic(code2, opts).coffee.js (err, res) ->
+      if err
+        cb err
+      unless (warn = res.warnings[0]) and
+      warn.sourceLines?[warn.line].indexOf('y = ()') > -1
+        cb 'Warning code snippet is not a match:', warn
+      cb()
+
   'error handling': (cb) ->
     code2 = code + '\n  x = <-\n'
     multic(code2, opts).coffee.js (err, res) ->

@@ -4,9 +4,11 @@ test   = require '../simple-test'
 
 
 code = """
+"use strict";
+
 var x = (a) => {
    return a + 1;
-}
+};
 """
 
 
@@ -30,6 +32,17 @@ test
         cb err
       if res.minified.split('\n').length > 1
         cb 'Remained pretty: ', res.minified
+      cb()
+
+  'warning handling (linter: unused)': (cb) ->
+    code2 = code.split '\n'
+    code2.push 'if (true)', '  x = 1;'
+    multic(code2.join('\n'), opts).es6.js.min (err, res) ->
+      if err
+        cb err
+      unless (warn = res.warnings[0])? and
+      warn.sourceLines?[warn.line].substr(warn.column, 3) is 'x ='
+        cb 'Warning code snippet is not a match', warn
       cb()
 
   'error handling': (cb) ->
