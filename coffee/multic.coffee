@@ -12,8 +12,6 @@ sources =
   js:     ['min']
   sass:   ['css']
 
-linters = ['coffee', 'es6', 'html', 'jade', 'js']
-
 
 opts_factory = (source, orig, cb) ->
   if typeof orig is 'function' and not cb?
@@ -80,7 +78,7 @@ module.exports = (src, options) ->
         process lint_inf, compile_inf, minify_inf, cb
 
     # lint
-    if lint_inf and lint_inf in linters and (opts.lint or not opts.lint?)
+    if lint_inf and (opts.lint or not opts.lint?)
       opts.lint = false
       return require('./linter/' + lint_inf) opts, ->
         process lint_inf, compile_inf, minify_inf, cb
@@ -109,12 +107,11 @@ module.exports = (src, options) ->
   for source, targets of sources
     for target in targets
       do (source, target) ->
-        if source in linters
-          iface[source] ?= (cb) ->
-            opts.source = src
-            process source, false, false, cb
-          iface.file[source] ?= (cb) ->
-            process source, false, false, cb
+        iface[source] ?= (cb) ->
+          opts.source = src
+          process source, false, false, cb
+        iface.file[source] ?= (cb) ->
+          process source, false, false, cb
 
         sfn = (iface[source] ?= {})[target] = (cb) ->
           opts.source = src

@@ -1,6 +1,7 @@
 
 LintError   = require '../error/lint-error'
 LintWarning = require '../warning/lint-warning'
+eol_eof     = require './common/eol-eof'
 linter      = require('jshint').JSHINT
 
 
@@ -27,9 +28,6 @@ module.exports = (inf, cb) ->
     parseInt(indent, 10) is Number(indent) and indent > 0
       cfg.indent = indent
 
-    if maxlen = inf.maxLength80
-      cfg.maxlen = 80
-
     if inf.es6
       cfg.esnext = true
 
@@ -48,11 +46,7 @@ module.exports = (inf, cb) ->
         title = 'Error' + if msg.code then ' (' + msg.code + ')' else ''
         inf.res.errors.push new LintError inf, msg, pos, msg.reason, title
 
-    unless inf.source.substr(inf.source.length - 1) is '\n'
-      title = 'Lint Warning (EOF)'
-      desc = 'Missing enter character at end of file'
-      pos = [(parts = inf.source.split '\n').length - 1, parts.pop().length]
-      inf.res.warnings.push new LintWarning inf, msg, pos, desc, title
+    eol_eof inf
 
   catch err
 

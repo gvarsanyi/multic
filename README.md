@@ -73,10 +73,10 @@ node.js compiler and minifier API for various web sources: jade, html, sass/scss
 This is useful for error messages and to define include path start point for jade and sass
 ### Turn linting off
     {lint: false}
-### Generate warnings for lines exceeding the 80 character limit
-    {maxLength80: true}
 ### Generate warnings for non-matching indentation spaces
     {indentation: N} // N > 0, usually 2 or 4
+### Generate warnings for lines exceeding the a limit
+    {maxLineLength: N} // N > 0, usually 80
 
 
 ## Consequent Errors and Warnings
@@ -92,7 +92,8 @@ Jade for example (as of v1.9.2) would produce propriatery warnings on STDERR out
 - __column__: (*number* or *null*) indication of error/warning column in line (0-based index, i.e. first column is column 0)
 - __sourceLines__: (*object* or *null*) a snippet of the source code around the error/warning. Keys are line numbers, values are the lines (without the \n character at the end). 11 lines (error/warning line + 5 previous + 5 following lines) or less (when the line is near the start or end of file).
 
-# Featured compilers
+# Featured processors
+## Compilers
 - [coffee](https://www.npmjs.com/package/coffee-script) -> js
 - [es6](https://www.npmjs.com/package/babel) -> js
 - [jade](https://www.npmjs.com/package/jade) -> html
@@ -106,10 +107,12 @@ Jade for example (as of v1.9.2) would produce propriatery warnings on STDERR out
 - css: [clean-css](https://www.npmjs.com/package/clean-css)
 
 ## Linters
+- generic lints (for EOL, EOF etc rules)
 - coffee: [coffee-lint](https://www.npmjs.com/package/jshint)
 - html: [htmllint](https://www.npmjs.com/package/htmllint)
 - js & es6: [jshint](https://www.npmjs.com/package/jshint)
+- jade: a combination of the compiler warnings and a jade-lint plugin
 
 # Coming soon (TODO)
 - Output to file
-- SASS, CSS and Jade linting
+- SASS, CSS

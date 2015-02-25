@@ -1,7 +1,7 @@
 
-eof         = require './common/eof'
 LintError   = require '../error/lint-error'
 LintWarning = require '../warning/lint-warning'
+eol_eof     = require './common/eol-eof'
 linter      = require('coffeelint').lint
 
 
@@ -12,7 +12,6 @@ module.exports = (inf, cb) ->
     cfg = # see option descriptions at http://www.coffeelint.org/#options
       camel_case_classes:           warn_level
       colon_assignment_spacing:     warn_level
-      line_endings:                 warn_level
       no_empty_param_list:          warn_level
       no_implicit_braces:           warn_level
       no_plusplus:                  warn_level
@@ -20,9 +19,8 @@ module.exports = (inf, cb) ->
       prefer_english_operator:      warn_level
       space_operators:              warn_level
       spacing_after_comma:          warn_level
-
-    if inf.maxLength80
-      cfg.max_line_length = warn_level
+      no_trailing_whitespace:       {level: 'ignore'} # handled by eol_eof
+      max_line_length:              {level: 'ignore'} # handled by eol_eof
 
     for msg in linter inf.source, cfg
       rule = if msg.rule then '[' + msg.rule + '] ' else ''
@@ -48,7 +46,7 @@ module.exports = (inf, cb) ->
         title ?= rule + 'Lint warning'
         inf.res.warnings.push new LintWarning inf, msg, pos, desc, title
 
-    eof inf
+    eol_eof inf
 
   catch err
 

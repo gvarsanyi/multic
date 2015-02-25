@@ -2,9 +2,9 @@
 # warnings of jade compiler
 
 
-eof           = require './common/eof'
 LintError     = require '../error/lint-error'
 LintWarning   = require '../warning/lint-warning'
+eol_eof       = require './common/eol-eof'
 jade_compiler = require '../compiler/jade-html'
 
 
@@ -62,10 +62,8 @@ module.exports = (inf, cb) ->
       # TODO quote consistency
       # TODO indent-style
       # TODO indent-width
-      # TODO max line length
-      # TODO line-end-style
 
-      eof inf
+      eol_eof inf
 
     catch err
 

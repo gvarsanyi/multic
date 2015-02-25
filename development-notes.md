@@ -45,24 +45,9 @@ Watch out for these issues when changing processor versions!
 ### SASS, CSS
 - No linting yet
 
-## No warnings
-Only a few compilers/minifiers would produce warning level messages. The ones that do NOT feature warnings:
-- Compilers:
-  - coffee
-  - es6
-  - ng-html2js
-- Minifiers:
-  - clean-css (produces warnings that are errors actually)
-  - html-minifier
-  - uglify-js
-
-## No errors
-A few processors just won't fail when needed:
-- ng-html2js (compiler)
-- clean-css (minifier) will provide some errors
-
-### Has errors but no line numbers (thus no code snippets)
+## Error objects
+### No line numbers in errors (thus no code snippets)
 - clean-css (minifier)
 
-### Has errors and line numbers but no column information
+### Has line numbers but no column information
 - jade errors+warnings (for both compiler and linter)

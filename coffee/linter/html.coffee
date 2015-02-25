@@ -1,6 +1,7 @@
 
 LintError   = require '../error/lint-error'
 LintWarning = require '../warning/lint-warning'
+eol_eof     = require './common/eol-eof'
 linter      = require 'htmllint'
 
 
@@ -8,17 +9,16 @@ module.exports = (inf, cb) ->
 
   try
     cfg = # descriptions at: https://github.com/htmllint/htmllint/wiki/Options
-      'attr-no-dup':         true
+      'attr-no-dup':         true # double attributes trigger error in jade
       'attr-no-unsafe-char': true
       'attr-quote-style':    'quoted' # TODO quote consistency
       'attr-req-value':      true
       'html-req-lang':       true
-      'id-no-dup':           true
+      'id-no-dup':           true # double attributes trigger error in jade
       'img-req-alt':         true
       'img-req-src':         true
       'indent-style':        'spaces'
       'label-req-for':       true
-      'line-end-style':      'lf'
       # 'spec-char-escape':    true # this also trigger warnings about spaces
       'tag-name-lowercase':  true
       'tag-name-match':      true
@@ -27,10 +27,6 @@ module.exports = (inf, cb) ->
     if (indent = inf.indentation) and
     parseInt(indent, 10) is Number(indent) and indent > 0
       cfg['indent-width'] = indent
-
-    # TODO support for max line length
-    # if maxlen = inf.maxLength80
-    #  cfg.maxlen = 80
 
     success = (warnings) ->
       try
@@ -41,6 +37,9 @@ module.exports = (inf, cb) ->
           inf.res.warnings.push new LintWarning inf, msg, pos, desc, title
       catch err
         inf.res.errors.push new LintError inf, err
+
+      eol_eof inf
+
       cb()
 
     error = (err) ->
