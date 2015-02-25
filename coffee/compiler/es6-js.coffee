@@ -1,6 +1,6 @@
 
 CompilationError = require '../error/compilation-error'
-compiler         = require '6to5'
+compiler         = require 'babel'
 
 
 module.exports = (inf, cb) ->
@@ -12,8 +12,8 @@ module.exports = (inf, cb) ->
 
     inf.res.compiled = (compiler.transform inf.source, opts).code
 
-    # 6to5 does not seem to support warnings
-    # 6to5 does not have includes (not ones that would pull in contents anyway)
+    # babel does not seem to support warnings
+    # babel does not have includes (not ones that would pull in contents anyway)
 
   catch err
 

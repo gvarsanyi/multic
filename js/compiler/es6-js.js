@@ -3,7 +3,7 @@ var CompilationError, compiler;
 
 CompilationError = require('../error/compilation-error');
 
-compiler = require('6to5');
+compiler = require('babel');
 
 module.exports = function(inf, cb) {
   var c, desc, err, l, opts, pos, ref, ref1, ref2, ref3;

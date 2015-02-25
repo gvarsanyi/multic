@@ -1,7 +1,7 @@
 multic
 ==========
 
-node.js compiler and minifier API for various web sources: jade, html, sass/scss, css, coffee-script, es6/6to5, javascript/es5, html2js
+node.js compiler and minifier API for various web sources: jade, html, sass/scss, css, coffee-script, es6/babel, javascript/es5, html2js
 
 # Install for your app
     cd /path/to/your/app
@@ -69,7 +69,7 @@ node.js compiler and minifier API for various web sources: jade, html, sass/scss
 
 ## Options
 ### Add file path when compiling from string
-    file: *filepath_string*useful for
+    {file: '*file_path*'}
 This is useful for error messages and to define include path start point for jade and sass
 ### Turn linting off
     {lint: false}
@@ -94,7 +94,7 @@ Jade for example (as of v1.9.2) would produce propriatery warnings on STDERR out
 
 # Featured compilers
 - [coffee](https://www.npmjs.com/package/coffee-script) -> js
-- [es6](https://www.npmjs.com/package/6to5) -> js
+- [es6](https://www.npmjs.com/package/babel) -> js
 - [jade](https://www.npmjs.com/package/jade) -> html
 - [sass/scss](https://www.npmjs.com/package/node-sass) -> css
 - html -> [AngularJS module](https://www.npmjs.com/package/ng-html2js) (js)
