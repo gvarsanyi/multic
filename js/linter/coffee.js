@@ -57,6 +57,12 @@ module.exports = function(inf, cb) {
         inf.res.warnings.push(new LintWarning(inf, msg, pos, desc, title));
       }
     }
+    if (inf.source.substr(inf.source.length - 1) !== '\n') {
+      title = 'Lint Warning (EOF)';
+      desc = 'Missing enter character at end of file';
+      pos = [(parts = inf.source.split('\n')).length - 1, parts.pop().length];
+      inf.res.warnings.push(new LintWarning(inf, msg, pos, desc, title));
+    }
   } catch (_error) {
     err = _error;
     inf.res.errors.push(new LintError(inf, err));

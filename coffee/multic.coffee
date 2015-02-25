@@ -109,6 +109,13 @@ module.exports = (src, options) ->
   for source, targets of sources
     for target in targets
       do (source, target) ->
+        if source in linters
+          iface[source] ?= (cb) ->
+            opts.source = src
+            process source, false, false, cb
+          iface.file[source] ?= (cb) ->
+            process source, false, false, cb
+
         sfn = (iface[source] ?= {})[target] = (cb) ->
           opts.source = src
           if target is 'min'

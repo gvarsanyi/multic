@@ -26,7 +26,7 @@ test
 
   'lint warning': (cb) ->
     code2 = code.replace '<h2>', '<h2 xxx>'
-    multic(code2, opts).html.min (err, res) ->
+    multic(code2, opts).html (err, res) ->
       if err
         cb err
       unless (warn = res.warnings[0])? and

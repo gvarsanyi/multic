@@ -73,8 +73,11 @@ node.js compiler and minifier API for various web sources: jade, html, sass/scss
 This is useful for error messages and to define include path start point for jade and sass
 ### Turn linting off
     {lint: false}
-### Enforce 80 characters line length
+### Generate warnings for lines exceeding the 80 character limit
     {maxLength80: true}
+### Generate warnings for non-matching indentation spaces
+    {indentation: N} // N > 0, usually 2 or 4
+
 
 ## Consequent Errors and Warnings
 Parsing errors from different kinds of compilers can be tricky. They have inconsistant error (although at times similar) error and warning messages.
@@ -109,5 +112,4 @@ Jade for example (as of v1.9.2) would produce propriatery warnings on STDERR out
 
 # Coming soon (TODO)
 - Output to file
-- Lint only
-- Some SASS and CSS
+- SASS, CSS and Jade linting

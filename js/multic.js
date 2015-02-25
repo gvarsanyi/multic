@@ -130,7 +130,20 @@ module.exports = function(src, options) {
   for (source in sources) {
     targets = sources[source];
     fn = function(source, target) {
-      var base, ffn, sfn;
+      var base, base1, ffn, sfn;
+      if (indexOf.call(linters, source) >= 0) {
+        if (iface[source] == null) {
+          iface[source] = function(cb) {
+            opts.source = src;
+            return process(source, false, false, cb);
+          };
+        }
+        if ((base = iface.file)[source] == null) {
+          base[source] = function(cb) {
+            return process(source, false, false, cb);
+          };
+        }
+      }
       sfn = (iface[source] != null ? iface[source] : iface[source] = {})[target] = function(cb) {
         opts.source = src;
         if (target === 'min') {
@@ -150,7 +163,7 @@ module.exports = function(src, options) {
           }, target, cb);
         };
       }
-      ffn = ((base = iface.file)[source] != null ? base[source] : base[source] = {})[target] = function(cb) {
+      ffn = ((base1 = iface.file)[source] != null ? base1[source] : base1[source] = {})[target] = function(cb) {
         if (target === 'min') {
           return process(source, false, source, cb);
         }

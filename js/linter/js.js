@@ -8,7 +8,7 @@ LintWarning = require('../warning/lint-warning');
 linter = require('jshint').JSHINT;
 
 module.exports = function(inf, cb) {
-  var cfg, err, i, indent, len, maxlen, msg, pos, ref, ref1, ref2, title;
+  var cfg, desc, err, i, indent, len, maxlen, msg, parts, pos, ref, ref1, ref2, title;
   try {
     cfg = {
       curly: true,
@@ -50,6 +50,12 @@ module.exports = function(inf, cb) {
         title = 'Error' + (msg.code ? ' (' + msg.code + ')' : '');
         inf.res.errors.push(new LintError(inf, msg, pos, msg.reason, title));
       }
+    }
+    if (inf.source.substr(inf.source.length - 1) !== '\n') {
+      title = 'Lint Warning (EOF)';
+      desc = 'Missing enter character at end of file';
+      pos = [(parts = inf.source.split('\n')).length - 1, parts.pop().length];
+      inf.res.warnings.push(new LintWarning(inf, msg, pos, desc, title));
     }
   } catch (_error) {
     err = _error;

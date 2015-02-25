@@ -64,10 +64,28 @@ test
           cb err
 
         multic('tmp/code.coffee', opts).file.coffee.js (err, res) ->
-            if err
-              cb err
-            if res.compiled.indexOf('->') > 1
-              cb 'Compilation error'
-            if res.compiled.split('\n').length < 3
-              cb 'Not pretty'
-            cb()
+          if err
+            cb err
+          if res.compiled.indexOf('->') > 1
+            cb 'Compilation error'
+          if res.compiled.split('\n').length < 3
+            cb 'Not pretty'
+          cb()
+
+  'lint from file': (cb) ->
+    code2 = code + '\ny = () ->\n'
+    mkdirp 'tmp/', {mode: '0777'}, (err) ->
+      if err
+        cb err
+
+      fs.writeFile 'tmp/code.coffee', code2, (err) ->
+        if err
+          cb err
+
+        multic('tmp/code.coffee', opts).file.coffee (err, res) ->
+          if err
+            cb err
+          unless (warn = res.warnings[0]) and
+          warn.sourceLines?[warn.line].indexOf('y = ()') > -1
+            cb 'Warning code snippet is not a match:', warn
+          cb()
