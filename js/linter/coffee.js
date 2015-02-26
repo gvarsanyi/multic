@@ -42,7 +42,10 @@ module.exports = function(inf, cb) {
           ref1 = parts[0].substr(8).split(':'), line = ref1[0], col = ref1[1];
           msg.message = parts.slice(1).join(' ');
         }
-        msg.message = msg.message.split('\\u001b')[0];
+        msg.message = msg.message.split('\u001b')[0];
+        if ((pos = msg.message.lastIndexOf('\n')) > -1) {
+          msg.message = msg.message.substr(0, pos);
+        }
         if (msg.description) {
           desc = rule + msg.description.split('\n<pre>')[0];
           title = msg.message;

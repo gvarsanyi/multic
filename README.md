@@ -88,29 +88,49 @@ Jade for example (as of v1.9.2) would produce propriatery warnings on STDERR out
 - __column__: (*number* or *null*) indication of error/warning column in line (0-based index, i.e. first column is column 0)
 - __sourceLines__: (*object* or *null*) a snippet of the source code around the error/warning. Keys are line numbers, values are the lines (without the \n character at the end). 11 lines (error/warning line + 5 previous + 5 following lines) or less (when the line is near the start or end of file).
 
+In JSON format:
+    {
+      "title": "[coffeescript_error] Error",
+      "message": "error: unexpected <",
+      "file": "src/test.coffee",
+      "line": 2,
+      "column": 6,
+      "sourceLines": {
+        "0": "x = (a) ->",
+        "1": "  a + 1",
+        "2": "  x = <-",
+        "3": ""
+      }
+    }
+
 # Featured processors
 ## Compilers
-- [coffee](https://www.npmjs.com/package/coffee-script) -> js
-- [es6](https://www.npmjs.com/package/babel) -> js
-- [jade](https://www.npmjs.com/package/jade) -> html
-- [sass/scss](https://www.npmjs.com/package/node-sass) -> css
-- html -> [AngularJS module](https://www.npmjs.com/package/ng-html2js) (js)
-- [jade](https://www.npmjs.com/package/jade) -> html -> [AngularJS module](https://www.npmjs.com/package/ng-html2js) (js)
+- coffee -> js: [coffee-script](https://www.npmjs.com/package/coffee-script)
+- es6 -> js: [babel](https://www.npmjs.com/package/babel) (renamed from *6to5*)
+- jade -> html: [jade](https://www.npmjs.com/package/jade)
+- scss -> css [node-sass](https://www.npmjs.com/package/node-sass)
+- html -> Angular JS module: [AngularJS module](https://www.npmjs.com/package/ng-html2js)
 
 ## Minifiers
+Optionally *multic* offers minification processes with efficient but fail-safe configurations for these outputs:
 - html: [html-minifier](https://www.npmjs.com/package/html-minifier)
 - javascript: [uglify-js](https://www.npmjs.com/package/uglify-js)
 - css: [clean-css](https://www.npmjs.com/package/clean-css)
 
 ## Linters
+*multic* always parses the provided source to catch syntax and other errors.
+
+Also it will generate warnings about things that may work you probably want to change as per best practices.
 - generic lints (for EOL, EOF etc rules)
 - coffee: [coffee-lint](https://www.npmjs.com/package/jshint)
+- css: [csslint](https://www.npmjs.com/package/csslint)
 - html: [htmllint](https://www.npmjs.com/package/htmllint)
-- js & es6: [jshint](https://www.npmjs.com/package/jshint)
 - jade: a combination of the compiler warnings and a jade-lint plugin
+- js & es6: [jshint](https://www.npmjs.com/package/jshint)
 
 # Coming soon (TODO)
 - Output to file
-- SASS-specific lint
-- Indentation checks for linting
-- Lint rules unification, configurability
+- Further linting improvements:
+  - SASS-specific lint
+  - Indentation checks for linting
+  - Lint rules unification, configurability, wiki page for generic rules

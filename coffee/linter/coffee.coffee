@@ -31,7 +31,9 @@ module.exports = (inf, cb) ->
           [line, col] = parts[0].substr(8).split ':'
           msg.message = parts[1 ...].join ' '
 
-        msg.message = msg.message.split('\\u001b')[0]
+        msg.message = msg.message.split('\u001b')[0]
+        if (pos = msg.message.lastIndexOf '\n') > -1
+          msg.message = msg.message.substr 0, pos
 
         if msg.description
           desc  = rule + msg.description.split('\n<pre>')[0]
