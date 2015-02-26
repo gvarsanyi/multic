@@ -66,6 +66,7 @@ module.exports = function(src, options) {
     includes: [],
     warnings: []
   };
+  opts.lint = null;
   if (err_arg0) {
     errors.push(err_arg0);
   }

@@ -53,6 +53,7 @@ module.exports = (src, options) ->
     errors: errors = []
     includes: []
     warnings: []
+  opts.lint = null
 
   if err_arg0
     errors.push err_arg0

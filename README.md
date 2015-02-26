@@ -71,10 +71,6 @@ node.js compiler and minifier API for various web sources: jade, html, sass/scss
 ### Add file path when compiling from string
     {file: '*file_path*'}
 This is useful for error messages and to define include path start point for jade and sass
-### Turn linting off
-    {lint: false}
-### Generate warnings for non-matching indentation spaces
-    {indentation: N} // N > 0, usually 2 or 4
 ### Generate warnings for lines exceeding the a limit
     {maxLineLength: N} // N > 0, usually 80
 
@@ -115,4 +111,6 @@ Jade for example (as of v1.9.2) would produce propriatery warnings on STDERR out
 
 # Coming soon (TODO)
 - Output to file
-- SASS, CSS
+- SASS-specific lint
+- Indentation checks for linting
+- Lint rules unification, configurability

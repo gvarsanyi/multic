@@ -1,6 +1,6 @@
 {
   "name": "multic",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "node.js compiler and minifier API for various web sources: jade, html, sass/scss, css, coffee-script, es6/6to5/babel, javascript/es5, html2js",
   "main": "js/multic.js",
   "scripts": {
@@ -11,6 +11,7 @@
     "clean-css": "^3.0.10",
     "coffee-script": "^1.9.1",
     "coffeelint": "^1.9.2",
+    "csslint": "^0.10.0",
     "html-minifier": "^0.7.0",
     "htmllint": "^0.2.3",
     "jade": "^1.9.2",

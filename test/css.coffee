@@ -25,11 +25,21 @@ test
         cb 'Remained pretty: ', res.minified
       cb()
 
+  'warning handling': (cb) ->
+    code2 = code + '\nxx {\n  width: 10px;\n  _width: 20px; }\n'
+    multic(code2, opts).css.min (err, res) ->
+      if err
+        cb err
+      unless (warn = res.warnings[0]) and
+      warn.sourceLines?[warn.line]?.substr(warn.column, 6) is '_width'
+        cb 'Warning code snippet is not a match:', warn
+      cb()
+
   'error handling': (cb) ->
     code2 = code + '\nx@@@x\n\n'
     multic(code2, opts).css.min (err, res) ->
       unless err
         cb 'Missing error'
-      unless res.errors[0]?.message?.indexOf('Broken declaration') > -1
-        cb 'Error generation mismatch:', res
+      unless err.sourceLines?[err.line]?.substr(err.column, 2) is '@@'
+        cb 'Error code snippet is not a match:', err
       cb()
