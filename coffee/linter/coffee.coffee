@@ -7,34 +7,33 @@ linter      = require('coffeelint').lint
 
 lint_map =
   errors:
-    duplicate_key: 'duplicate_key'
+    #--- js + coffee
+    duplicate_key:                     'duplicate_key'
 
   mandatory_warnings:
-    ensure_comprehensions:         'ensure_comprehensions'
-    # no_comparison_assignments:     true
-    no_debugger:                   'no_debugger'
-    # no_deprecated_iterator:        true
-    # no_deprecated_proto:           true
-    # no_eval:                       true
-    # no_native_prototype_extension: true
-    # no_operator_parentheses:       true
-    # no_undefined:                  true
-    # no_unused:                     true
+    #--- js + coffee
+    # no_comparison_assignments:         true
+    no_debugger:                       'no_debugger'
+    # no_deprecated_iterator:            true
+    # no_deprecated_proto:               true
+    # no_eval:                           true
+    # no_native_prototype_extension:     true
+    # no_operator_parentheses:           true
+    # no_undefined:                      true
+    # no_unused:                         true
+
+    #--- coffee only
+    ensure_comprehensions:             'ensure_comprehensions'
 
   enabled_warnings:
+    #--- general
     file_end_newline:                  true
     indentation:                       'indentation'
     line_end:                          true
     line_end_whitespace:               true
     no_tabs:                           'no_tabs'
-    arrow_spacing:                     'arrow_spacing'
-    no_backticks:                      'no_backticks'
-    no_empty_param_list:               'no_empty_param_list'
-    no_implicit_braces:                'no_implicit_braces'
-    no_trailing_semicolons:            'no_trailing_semicolons'
-    no_unnecessary_fat_arrows:         'no_unnecessary_fat_arrows'
-    prefer_english_operators:          'prefer_english_operator'
-    # allowed_globals:                   true
+
+    #--- js + coffee
     braces_spacing:                    'braces_spacing'
     camel_case_classes:                'camel_case_classes'
     colon_assignment_spacing:          'colon_assignment_spacing'
@@ -43,19 +42,33 @@ lint_map =
     # no_non_breaking_space:             true
     no_throwing_strings:               'no_throwing_strings'
     # no_unnecessary_brackets:           true
-    prefer_single_quotes:              'prefer_single_quotes'
+    quote_consistency:                 'prefer_single_quotes'
     space_operators:                   'space_operators'
     spacing_after_comma:               'spacing_after_comma'
     # typeof_value:                      true
 
+    #--- coffee only
+    arrow_spacing:                     'arrow_spacing'
+    no_backticks:                      'no_backticks'
+    no_empty_param_list:               'no_empty_param_list'
+    no_implicit_braces:                'no_implicit_braces'
+    no_trailing_semicolons:            'no_trailing_semicolons'
+    no_unnecessary_fat_arrows:         'no_unnecessary_fat_arrows'
+    prefer_english_operators:          'prefer_english_operator'
+
   disabled_warnings:
-    max_line_length:                false
-    no_implicit_parentheses:        ['no_implicit_parentheses'
-                                     'non_empty_constructor_needs_parens']
-    # camel_case:                     false
-    empty_constructor_needs_parens: 'empty_constructor_needs_parens'
-    # no_comma_operator:              false
-    no_plusplus:                    false
+    #--- general
+    max_line_length:                   false
+
+    #--- js + coffee
+    # camel_case_variables:              false
+    constructor_parentheses_required: 'empty_constructor_needs_parens'
+    # no_comma_operator:                 false
+    no_plusplus:                       false
+
+    #--- coffee only
+    no_implicit_parentheses:           ['no_implicit_parentheses'
+                                        'non_empty_constructor_needs_parens']
 
   disabled_rules: ['cyclomatic_complexity'
                    'line_endings'
@@ -65,6 +78,8 @@ lint_map =
                    'no_stand_alone_at'
                    'no_trailing_whitespace'
                    'transform_messes_up_line_numbers']
+
+allowed_globals = {}
 
 
 module.exports = (inf, cb) ->
