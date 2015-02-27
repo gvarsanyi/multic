@@ -21,7 +21,8 @@ module.exports = function(inf, cb) {
       'zero-units': true,
       'unqualified-attributes': true,
       'ids': true,
-      'important': true
+      'important': true,
+      'vendor-prefix': true
     };
     data = linter(inf.source, cfg);
     ref = data != null ? data.messages : void 0;

@@ -5,58 +5,6 @@ eol_eof     = require './common/eol-eof'
 linter      = require 'htmllint'
 
 
-lint_map =
-  errors:
-    #--- html + jade
-    no_attribute_dupes:             ['attr-no-dup', 'id-no-dup']
-    no_unsafe_attribute_characters: 'attr-no-unsafe-char'
-    tag_name_match:                 'tag-name-match'
-
-  mandatory_warnings:
-    #--- html + jade
-    html_lang_required:             'html-req-lang'
-    img_alt_required:               'img-req-alt'
-    img_src_required:               'img-req-src'
-    label_for_required:             'label-req-for'
-    lowercase_tag_names:            'tag-name-lowercase'
-
-  enabled_warnings:
-    #--- general
-    file_end_newline:               true
-    indentation:
-      name:  'indent-width'
-      value: [false, 2, 4]
-    line_end:                       true
-    line_end_whitespace:            true
-    no_tabs:
-      name:  'indent-style'
-      value: [false, 'spaces']
-
-    #--- html + jade
-    quote_consistency:
-      name: 'attr-quote-style'
-      value: [false, 'quoted']
-
-  disabled_warnings:
-    #--- general
-    max_line_length:                true
-
-    #--- html + jade
-    no_implicit_attribute_value:    'attr-req-value'
-
-  disabled_rules: ['attr-bans'
-                   'attr-name-style'
-                   'doctype-first'
-                   'doctype-html5'
-                   'href-style'
-                   'id-class-no-ad'
-                   'id-class-style'
-                   'line-end-style'
-                   'spec-char-escape'
-                   'tag-bans'
-                   'tag-self-close']
-
-
 module.exports = (inf, cb) ->
 
   try
