@@ -40,23 +40,23 @@ lint_map =
   enabled_warnings:
     #--- general
     file_end_newline:                  true
-    indentation:                       'indent'
+    indentation:                       {name: 'indent', value: [false, 2, 4]}
     line_end:                          true
     line_end_whitespace:               true
-    # no_tabs:                           true
+    no_tabs:                           0
 
     #--- js + coffee
-    # braces_spacing:                    true
+    braces_spacing:                    0
     camel_case_classes:                'newcap'
-    # colon_assignment_spacing:          true
+    colon_assignment_spacing:          0
     no_arguments_caller_or_callee:     'noarg'
-    # no_interpolation_in_single_quotes: true
+    no_interpolation_in_single_quotes: 0
     no_non_breaking_space:             'nonbsp'
-    # no_throwing_strings:               true
+    no_throwing_strings:               0
     no_unnecessary_brackets:           '!sub'
     quote_consistency:                 'quotmark'
-    # space_operators:                   true
-    # spacing_after_comma:               true
+    space_operators:                   0
+    spacing_after_comma:               0
     typeof_value:                      '!notypeof'
 
     #--- js only
@@ -65,11 +65,11 @@ lint_map =
 
   disabled_warnings:
     #--- general
-    max_line_length:                   false
+    max_line_length:                   true
 
     #--- js + coffee
     camel_case_variables:              'camelcase'
-    # constructor_parentheses_required:  false
+    constructor_parentheses_required:  0
     no_comma_operator:                 'nocomma'
     no_plusplus:                       '!plusplus'
 
