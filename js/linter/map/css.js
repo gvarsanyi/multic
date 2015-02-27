@@ -13,14 +13,13 @@ module.exports = {
   enabled_warnings: {
     file_end_newline: true,
     indentation: 0,
-    line_end_whitespace: true,
+    no_line_end_whitespace: true,
     no_tabs: 0,
     braces_spacing: 0,
     no_id_selectors: 'ids',
     no_important_hack: 'important',
     no_universal_selectors: 'universal-selector',
     no_unqualified_attribute_selectors: 'unqualified-attributes',
-    spacing_after_comma: 0,
     no_css_import: 'import'
   },
   disabled_warnings: {

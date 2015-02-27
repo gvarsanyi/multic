@@ -17,7 +17,7 @@ module.exports =
     #--- general
     file_end_newline:                   true
     indentation:                        0
-    line_end_whitespace:                true
+    no_line_end_whitespace:             true
     no_tabs:                            0
 
     #--- css + sass
@@ -26,7 +26,6 @@ module.exports =
     no_important_hack:                  0
     no_universal_selectors:             0
     no_unqualified_attribute_selectors: 0
-    spacing_after_comma:                0
 
   disabled_warnings:
     #--- general

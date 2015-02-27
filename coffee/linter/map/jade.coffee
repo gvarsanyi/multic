@@ -21,7 +21,7 @@ module.exports =
     #--- general
     file_end_newline:               true
     indentation:                    0
-    line_end_whitespace:            true
+    no_line_end_whitespace:         true
     no_tabs:                        0
 
     #--- html + jade

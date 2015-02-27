@@ -67,14 +67,6 @@ node.js compiler and minifier API for various web sources: jade, html, sass/scss
   - default value: empty Array
   - always created
 
-## Options
-### Add file path when compiling from string
-    {file: '*file_path*'}
-This is useful for error messages and to define include path start point for jade and sass
-### Generate warnings for lines exceeding the a limit
-    {maxLineLength: N} // N > 0, usually 80
-
-
 ## Consequent Errors and Warnings
 Parsing errors from different kinds of compilers can be tricky. They have inconsistant error (although at times similar) error and warning messages.
 
@@ -103,6 +95,75 @@ In JSON format:
       }
     }
 
+## Options
+### Add file path when compiling from string
+    {file: '*file_path*'}
+This is useful for error messages and to define include path start point for jade and sass
+
+### Optional lint rules
+#### Enabled by default
+You may turn these rules off by passing `false` as value:
+- All sources
+  - file_end_newline
+  - indentation *(not implemented yet for: css, jade, sass)*
+  - no_line_end_whitespace
+  - no_tabs *(not implemented yet for: js/es6, css, jade, sass)*
+- Coffee + JS/ES6 + Jade + HTML
+  - quote_consistency *(not yet implemented for: jade)*
+- Coffee + JS/ES6 + SASS + CSS
+  - braces_spacing *(not implemented yet for: js/es6, css, sass)*
+- Coffee + JS/ES6
+  - camel_case_classes
+  - colon_assignment_spacing *(not implemented yet for: js/es6)*
+  - no_arguments_caller_or_callee *(not implemented yet for: coffee)*
+  - no_interpolation_in_single_quotes *(not implemented yet for: js/es6)*
+  - no_non_breaking_space *(not implemented yet for: coffee)*
+  - no_throwing_strings *(not implemented yet for: js/es6)*
+  - no_unnecessary_brackets *(not implemented yet for: coffee)*
+  - space_operators *(not implemented yet for: js/es6)*
+  - spacing_after_comma *(not implemented yet for: js/es6)*
+  - typeof_value *(not implemented yet for: coffee)*
+- Coffee only
+  - arrow_spacing
+  - no_backticks
+  - no_empty_param_list
+  - no_implicit_braces
+  - no_trailing_semicolons
+  - no_unnecessary_fat_arrows
+  - prefer_english_operators
+- JS/ES6 only
+  - no_type_unsafe_comparison
+  - wrap_immediately_called_function
+- Jade only
+  - no_comma_separated_attributes *(not yet implemented)*
+- SASS + CSS
+  - no_id_selectors *(not yet implemented for: sass)*
+  - no_important_hack *(not yet implemented for: sass)*
+  - no_universal_selectors *(not yet implemented for: sass)*
+  - no_unqualified_attribute_selectors *(not yet implemented for: sass)*
+- CSS only
+  - no_css_import
+
+#### Dsiabled by default
+You may turn these rules on by passing `true` as value:
+- All sources
+  - max_line_length
+- Coffee + JS/ES6
+  - camel_case_variables *(not implemented yet for: coffee)*
+  - constructor_parentheses_required *(not implemented yet for: js/es6)*
+  - no_comma_operator *(not implemented yet for: coffee)*
+  - no_plusplus
+- JS/ES6 only
+  - no_expression_looking_assignment
+  - no_multiline_string
+- Jade + HTML
+  - no_implicit_attribute_value *(not yet implemented for: jade)*
+- SASS + CSS
+  - no_outline_disabling *(not yet implemented for: sass)*
+  - no_qualified_headings *(not yet implemented for: sass)*
+  - shorthand_property_required *(not yet implemented for: sass)*
+  - unique_headings *(not yet implemented for: sass)*
+
 # Featured processors
 ## Compilers
 - coffee -> js: [coffee-script](https://www.npmjs.com/package/coffee-script)
@@ -130,7 +191,4 @@ Also it will generate warnings about things that may work you probably want to c
 
 # Coming soon (TODO)
 - Output to file
-- Further linting improvements:
-  - SASS-specific lint
-  - Indentation checks for linting
-  - Lint rules unification, configurability, wiki page for generic rules
+- Missing lint rule implementations, added descriptions and links for rules

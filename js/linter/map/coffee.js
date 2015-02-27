@@ -23,7 +23,7 @@ module.exports = {
       property: 'indentation',
       values: [false, 2, 4]
     },
-    line_end_whitespace: true,
+    no_line_end_whitespace: true,
     no_tabs: 'no_tabs',
     braces_spacing: {
       name: 'braces_spacing',

@@ -30,7 +30,7 @@ module.exports =
       name:     'indentation'
       property: 'indentation'
       values:   [false, 2, 4]
-    line_end_whitespace:               true
+    no_line_end_whitespace:            true
     no_tabs:                           'no_tabs'
 
     #--- js + coffee

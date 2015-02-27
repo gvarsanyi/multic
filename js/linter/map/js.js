@@ -33,7 +33,7 @@ module.exports = {
       name: 'indent',
       values: [false, 2, 4]
     },
-    line_end_whitespace: true,
+    no_line_end_whitespace: true,
     no_tabs: 0,
     braces_spacing: 0,
     camel_case_classes: 'newcap',

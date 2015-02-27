@@ -14,7 +14,7 @@ module.exports = {
   enabled_warnings: {
     file_end_newline: true,
     indentation: 0,
-    line_end_whitespace: true,
+    no_line_end_whitespace: true,
     no_tabs: 0,
     quote_consistency: 0,
     no_comma_separated_attributes: 0
