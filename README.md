@@ -69,32 +69,15 @@ Compile, Minify, Lint
       warnings: []
     }
 
-- __source__: *(string)* only exists if file is read
-- __compiled__:
-  - content: compiled, unminified code
-  - type: string
-  - optional: only exists if compilation was requested
-- __minified__:
-  - content: minified code
-  - type: string
-  - optional: only exists if minification was requested
-- __includes__
-  - content: included files for jade and sass files with includes/import
-  - type: Array object
-  - default value: empty Array
-  - always created
-- __errors__: Array of errors (always exists)
-  - content: errors in consistent Error objects (see below)
-  - type: Array object
-  - default value: empty Array
-  - always created
-- __warnings__:
-  - content: warnings in consistent Error objects (see below)
-  - type: Array object
-  - default value: empty Array
-  - always created
+- __source__: *(string)* source code (if loaded from file)
+- __compiled__: *(string)* compiled, unminified code (on compilation requests)
+- __minified__: *(string)* minified code (on minification requests)
+- __includes__: *(Array)* of *(string)*s included files (only used for jade and sass files with includes/import)
+- __errors__: *(Array)* of *(Error)*-inherited objects
+- __warnings__: *(Array)* of *(Error)*-inherited objects
 
 ## Consequent Errors and Warnings
+Objects created using instances of object inherited from JavaScript-native Error class:
     {
       title:   'Syntax Error',
       message: 'Unexpected <',
