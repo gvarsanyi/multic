@@ -1,6 +1,10 @@
 
 module.exports =
 
+  errors:
+    #--- general
+    unix_line_end:                      true
+
   mandatory_warnings:
     #--- css + sass
     no_overqualified_elements:          0
@@ -13,7 +17,6 @@ module.exports =
     #--- general
     file_end_newline:                   true
     indentation:                        0
-    line_end:                           true
     line_end_whitespace:                true
     no_tabs:                            0
 

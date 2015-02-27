@@ -2,6 +2,9 @@
 module.exports =
 
   errors:
+    #--- general
+    unix_line_end:                     true
+
     #--- js + coffee
     duplicate_key:                     'duplicate_key'
 
@@ -26,8 +29,7 @@ module.exports =
     indentation:
       name:     'indentation'
       property: 'indentation'
-      value:    [false, 2, 4]
-    line_end:                          true
+      values:   [false, 2, 4]
     line_end_whitespace:               true
     no_tabs:                           'no_tabs'
 

@@ -67,11 +67,13 @@ module.exports = function(inf, cb) {
       }
     };
     cfg = {
-      filename: inf.file,
       compileDebug: false,
       pretty: true,
       includes: (includes = [])
     };
+    if (inf.options.file) {
+      cfg.filename = inf.options.file;
+    }
     if (Array.isArray(inf.jadeNodes)) {
       cfg.nodes = inf.jadeNodes;
     }

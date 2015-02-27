@@ -2,8 +2,11 @@
 module.exports =
 
   errors:
+    #--- general
+    unix_line_end:                     true
+
     #--- js + coffee
-    duplicate_key:                     'duplicate_key'
+    duplicate_key:                     0
     no_empty_elements:                 '!elision'
 
   mandatory_warnings:
@@ -36,9 +39,8 @@ module.exports =
     #--- general
     file_end_newline:                  true
     indentation:
-      name:  'indent'
-      value: [false, 2, 4]
-    line_end:                          true
+      name:   'indent'
+      values: [false, 2, 4]
     line_end_whitespace:               true
     no_tabs:                           0
 

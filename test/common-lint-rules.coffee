@@ -34,11 +34,10 @@ test
 
   'eol': (cb) ->
     multic(code.split('\n').join('\r\n'), opts).coffee.js (err, res) ->
-      if err
-        cb err
-      unless (warn = res.warnings[0]) and
-      warn.sourceLines?[warn.line]?.substr(warn.column) is '\r'
-        cb 'Warning code snippet is not a match:', warn
+      unless err
+        cb 'Error was expected'
+      unless err.sourceLines?[err.line]?.substr(err.column) is '\r'
+        cb 'Warning code snippet is not a match:', err
       cb()
 
   'wsln': (cb) ->
@@ -62,7 +61,7 @@ test
   'maxln': (cb) ->
     xxl = '# this is a very long line that wont fit the maxlen requirement' +
           'hence it will trigger a lint warning\n'
-    opts.maxLineLength = true # translates to 80
+    opts.max_line_length = true # translates to 80
     multic(code + xxl, opts).coffee.js (err, res) ->
       if err
         cb err

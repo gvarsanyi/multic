@@ -31,9 +31,9 @@ module.exports = function(inf, cb) {
         return cb();
       }
     };
-    if (inf.file) {
-      opts.file = inf.file;
-      pathes.push(path.resolve(path.dirname(inf.file) + '/'));
+    if (inf.options.file) {
+      opts.file = inf.options.file;
+      pathes.push(path.resolve(path.dirname(inf.options.file) + '/'));
     }
     return compiler.render(opts);
   } catch (_error) {

@@ -26,6 +26,7 @@ test
 
   'lint warning': (cb) ->
     code2 = code.replace '<h2>', '<h2 xxx>'
+    opts.no_implicit_attribute_value = true
     multic(code2, opts).html (err, res) ->
       if err
         cb err

@@ -11,8 +11,8 @@ module.exports = function(inf, cb) {
     opts = {
       bare: true
     };
-    if (inf.file) {
-      opts.filename = inf.file;
+    if (inf.options.file) {
+      opts.filename = inf.options.file;
     }
     inf.res.compiled = compiler.compile(inf.source, opts);
   } catch (_error) {

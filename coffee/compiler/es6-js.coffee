@@ -7,8 +7,8 @@ module.exports = (inf, cb) ->
 
   try
     opts = {}
-    if inf.file
-      opts.filename = inf.file
+    if inf.options.file
+      opts.filename = inf.options.file
 
     inf.res.compiled = (compiler.transform inf.source, opts).code
 

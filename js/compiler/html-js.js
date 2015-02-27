@@ -8,7 +8,7 @@ compiler = require('ng-html2js');
 module.exports = function(inf, cb) {
   var err;
   try {
-    inf.res.compiled = compiler(inf.file, inf.source);
+    inf.res.compiled = compiler(inf.options.file, inf.source);
   } catch (_error) {
     err = _error;
     inf.res.errors.push(new CompilationError(inf, err));

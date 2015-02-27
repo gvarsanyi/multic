@@ -2,6 +2,9 @@
 module.exports =
 
   errors:
+    #--- general
+    unix_line_end:                  true
+
     #--- html + jade
     # no_attribute_dupes:             -1 # jade compiler, unknown-rule-name
     no_unsafe_attribute_characters: 0
@@ -18,7 +21,6 @@ module.exports =
     #--- general
     file_end_newline:               true
     indentation:                    0
-    line_end:                       true
     line_end_whitespace:            true
     no_tabs:                        0
 

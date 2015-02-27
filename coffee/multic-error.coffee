@@ -28,8 +28,8 @@ class MulticError extends Error
 
     @title = title or orig_name or @constructor.name
 
-    if inf.file
-      @file = inf.file
+    if inf.options.file
+      @file = inf.options.file
 
     if (line_n = intify line)?
       @line = line_n
@@ -53,6 +53,14 @@ class MulticError extends Error
         column_n += column_off
       return [line_n, column_n]
     null
+
+
+  @posByIndex: (lines, col) ->
+    line = 0
+    while lines[line]? and col > len = lines[line].length
+      col -= len + 1
+      line += 1
+    [line, col]
 
 
 module.exports = MulticError

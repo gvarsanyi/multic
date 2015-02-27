@@ -2,6 +2,9 @@
 module.exports =
 
   errors:
+    #--- general
+    unix_line_end:                  true
+
     #--- html + jade
     no_attribute_dupes:             ['attr-no-dup', 'id-no-dup']
     no_unsafe_attribute_characters: 'attr-no-unsafe-char'
@@ -19,18 +22,17 @@ module.exports =
     #--- general
     file_end_newline:               true
     indentation:
-      name:  'indent-width'
-      value: [false, 2, 4]
-    line_end:                       true
+      name:   'indent-width'
+      values: [false, 2, 4]
     line_end_whitespace:            true
     no_tabs:
-      name:  'indent-style'
-      value: [false, 'spaces']
+      name:   'indent-style'
+      values: [false, 'spaces']
 
     #--- html + jade
     quote_consistency:
-      name: 'attr-quote-style'
-      value: [false, 'quoted']
+      name:   'attr-quote-style'
+      values: [false, 'quoted']
 
   disabled_warnings:
     #--- general
@@ -39,8 +41,7 @@ module.exports =
     #--- html + jade
     no_implicit_attribute_value:    'attr-req-value'
 
-  disabled_rules: ['attr-bans'
-                   'attr-name-style'
+  disabled_rules: ['attr-name-style'
                    'doctype-first'
                    'doctype-html5'
                    'href-style'
@@ -48,5 +49,4 @@ module.exports =
                    'id-class-style'
                    'line-end-style'
                    'spec-char-escape'
-                   'tag-bans'
                    'tag-self-close']

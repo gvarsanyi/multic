@@ -37,7 +37,7 @@ test
   'warning handling (linter: unused)': (cb) ->
     code2 = code.split '\n'
     code2.push 'if (true)', '  x = 1;'
-    multic(code2.join('\n'), opts).es6.js.min (err, res) ->
+    multic(code2.join('\n') + '\n', opts).es6.js.min (err, res) ->
       if err
         cb err
       unless (warn = res.warnings[0])? and

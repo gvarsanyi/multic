@@ -1,55 +1,35 @@
 
 LintError   = require '../error/lint-error'
 LintWarning = require '../warning/lint-warning'
-eol_eof     = require './common/eol-eof'
 linter      = require('jshint').JSHINT
+rule_parser = require './rule/_parser'
 
 
 module.exports = (inf, cb) ->
 
-  try
-    cfg = # see option descriptions at http://jshint.com/docs/options/
-      curly:        true
-      devel:        true
-      freeze:       true
-      globalstrict: true
-      immed:        true
-      latedef:      true
-      noarg:        true
-      node:         true
-      nonbsp:       true
-      nonew:        true
-      quotmark:     true
-      singleGroups: true
-      undef:        true
-      unused:       true
-
-    if (indent = inf.indentation) and
-    parseInt(indent, 10) is Number(indent) and indent > 0
-      cfg.indent = indent
-
+  rule_parser inf, (if inf.es6 then 'es6' else 'js'), cb, (cfg) ->
     if inf.es6
       cfg.esnext = true
 
-    linter inf.source, cfg
+    try
 
-    for msg in linter.data()?.errors or []
-      pos = LintError.parsePos msg.line, msg.character, -1, -1
+      linter inf.source, cfg
 
-      if msg.code is 'W117' and inf.allowGlobals
-        continue
+      for msg in linter.data()?.errors or []
+        pos = LintError.parsePos msg.line, msg.character, -1, -1
 
-      if msg.code?[0] is 'W'
-        title = 'Lint Warning' + if msg.code then ' (' + msg.code + ')' else ''
-        inf.res.warnings.push new LintWarning inf, msg, pos, msg.reason, title
-      else
-        title = 'Error' + if msg.code then ' (' + msg.code + ')' else ''
-        inf.res.errors.push new LintError inf, msg, pos, msg.reason, title
+#         if msg.code is 'W117' and inf.allowGlobals
+#           continue
 
-    eol_eof inf
+        if msg.code?[0] is 'W'
+          title = 'Warning' + if msg.code then ' (' + msg.code + ')' else ''
+          inf.res.warnings.push new LintWarning inf, msg, pos, msg.reason, title
+        else
+          title = 'Error' + if msg.code then ' (' + msg.code + ')' else ''
+          inf.res.errors.push new LintError inf, msg, pos, msg.reason, title
 
-  catch err
+    catch err
 
-    inf.res.errors.push new LintError inf, err
+      inf.res.errors.push new LintError inf, err
 
-  cb()
+    cb()

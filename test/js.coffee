@@ -29,7 +29,7 @@ test
   'warning handling (linter: unused)': (cb) ->
     code2 = code.split '\n'
     code2.push 'if (true)', '  ' + code2.pop()
-    multic(code2.join('\n'), opts).js.min (err, res) ->
+    multic(code2.join('\n') + '\n', opts).js.min (err, res) ->
       if err
         cb err
       unless (warn = res.warnings[0])? and

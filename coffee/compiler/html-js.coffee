@@ -6,7 +6,7 @@ compiler         = require 'ng-html2js'
 module.exports = (inf, cb) ->
 
   try
-    inf.res.compiled = compiler inf.file, inf.source # TODO , module_name
+    inf.res.compiled = compiler inf.options.file, inf.source # TODO , module_name
 
     # ng-html2js does not seem to support warnings
     # ng-html2js does not have includes (not ones that would pull in contents anyway)

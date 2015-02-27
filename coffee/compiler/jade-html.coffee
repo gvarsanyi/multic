@@ -58,10 +58,12 @@ module.exports = (inf, cb) ->
         inf.res.warnings.push new CompilationWarning inf, msg
 
     cfg =
-      filename:     inf.file
       compileDebug: false
       pretty:       true
       includes:     (includes = [])
+
+    if inf.options.file
+      cfg.filename = inf.options.file
 
     if Array.isArray inf.jadeNodes
       cfg.nodes = inf.jadeNodes

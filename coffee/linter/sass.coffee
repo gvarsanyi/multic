@@ -1,16 +1,8 @@
 
-LintWarning = require '../warning/lint-warning'
-eol_eof     = require './common/eol-eof'
+rule_parser = require './rule/_parser'
 
 
 module.exports = (inf, cb) ->
 
-  try
-
-    eol_eof inf
-
-  catch err
-
-    inf.res.errors.push new LintError inf, err
-
-  cb()
+  rule_parser inf, 'sass', cb, (cfg) ->
+    cb()

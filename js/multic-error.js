@@ -24,7 +24,7 @@ MulticError = (function(superClass) {
   MulticError.prototype.title = null;
 
   function MulticError(inf, err, pos, description, title) {
-    var column, column_n, from, i, j, len, line, line_literal, line_n, orig_name, ref, ref1, ref2, sourcelines;
+    var column, column_n, from, i, j, len1, line, line_literal, line_n, orig_name, ref, ref1, ref2, sourcelines;
     if (Array.isArray(pos)) {
       line = pos[0], column = pos[1];
     } else {
@@ -37,8 +37,8 @@ MulticError = (function(superClass) {
       }
     }
     this.title = title || orig_name || this.constructor.name;
-    if (inf.file) {
-      this.file = inf.file;
+    if (inf.options.file) {
+      this.file = inf.options.file;
     }
     if ((line_n = intify(line)) != null) {
       this.line = line_n;
@@ -47,7 +47,7 @@ MulticError = (function(superClass) {
       }
       from = Math.max(0, line_n - 5);
       if ((ref1 = (sourcelines = (ref2 = inf.source) != null ? ref2.split('\n').slice(from, +(line_n + 5) + 1 || 9e9) : void 0)) != null ? ref1.length : void 0) {
-        for (i = j = 0, len = sourcelines.length; j < len; i = ++j) {
+        for (i = j = 0, len1 = sourcelines.length; j < len1; i = ++j) {
           line_literal = sourcelines[i];
           (this.sourceLines != null ? this.sourceLines : this.sourceLines = {})[from + i] = line_literal;
         }
@@ -73,6 +73,16 @@ MulticError = (function(superClass) {
       return [line_n, column_n];
     }
     return null;
+  };
+
+  MulticError.posByIndex = function(lines, col) {
+    var len, line;
+    line = 0;
+    while ((lines[line] != null) && col > (len = lines[line].length)) {
+      col -= len + 1;
+      line += 1;
+    }
+    return [line, col];
   };
 
   return MulticError;
