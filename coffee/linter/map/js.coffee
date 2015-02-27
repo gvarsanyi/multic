@@ -42,6 +42,7 @@ module.exports =
       name:   'indent'
       values: [false, 2, 4]
     no_line_end_whitespace:            true
+    no_non_breaking_space:             'nonbsp'
     no_tabs:                           0
 
     #--- js + coffee
@@ -50,7 +51,6 @@ module.exports =
     colon_assignment_spacing:          0
     no_arguments_caller_or_callee:     'noarg'
     no_interpolation_in_single_quotes: 0
-    no_non_breaking_space:             'nonbsp'
     no_throwing_strings:               0
     no_unnecessary_brackets:           '!sub'
     quote_consistency:                 'quotmark'

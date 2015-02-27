@@ -1,7 +1,7 @@
 {
   "name": "multic",
-  "version": "0.4.5",
-  "description": "node.js compiler and minifier API for various web sources: jade, html, sass/scss, css, coffee-script, es6/6to5/babel, javascript/es5, html2js",
+  "version": "0.4.6",
+  "description": "converged linter, compiler and minifier API for multiple web sources: jade, html, sass/scss, css, coffee-script, es6/6to5/babel, javascript/es5, html2js",
   "main": "js/multic.js",
   "scripts": {
     "test": "make test"
@@ -46,6 +46,8 @@
     "minify",
     "unified",
     "standard",
+    "sane",
+    "converged",
     "error",
     "warning",
     "lint"

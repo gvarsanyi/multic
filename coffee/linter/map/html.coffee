@@ -25,6 +25,7 @@ module.exports =
       name:   'indent-width'
       values: [false, 2, 4]
     no_line_end_whitespace:         true
+    no_non_breaking_space:          0
     no_tabs:
       name:   'indent-style'
       values: [false, 'spaces']

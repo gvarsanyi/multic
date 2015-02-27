@@ -20,6 +20,9 @@ module.exports = (inf, cb) ->
             [line, col] = parts[0].substr(8).split ':'
             msg.message = parts[1 ...].join ' '
 
+          if msg.message.substr(0, 7) is 'error: '
+            msg.message = msg.message[7].toUpperCase() + msg.message.substr 8
+
           msg.message = msg.message.split('\u001b')[0]
           if (pos = msg.message.lastIndexOf '\n') > -1
             msg.message = msg.message.substr 0, pos

@@ -23,6 +23,9 @@ module.exports = function(inf, cb) {
             ref1 = parts[0].substr(8).split(':'), line = ref1[0], col = ref1[1];
             msg.message = parts.slice(1).join(' ');
           }
+          if (msg.message.substr(0, 7) === 'error: ') {
+            msg.message = msg.message[7].toUpperCase() + msg.message.substr(8);
+          }
           msg.message = msg.message.split('\u001b')[0];
           if ((pos = msg.message.lastIndexOf('\n')) > -1) {
             msg.message = msg.message.substr(0, pos);

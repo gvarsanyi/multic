@@ -31,6 +31,7 @@ module.exports =
       property: 'indentation'
       values:   [false, 2, 4]
     no_line_end_whitespace:            true
+    no_non_breaking_space:             0
     no_tabs:                           'no_tabs'
 
     #--- js + coffee
@@ -45,7 +46,6 @@ module.exports =
       values:   [false, 0]
     no_arguments_caller_or_callee:     0
     no_interpolation_in_single_quotes: 'no_interpolation_in_single_quotes'
-    no_non_breaking_space:             0
     no_throwing_strings:               'no_throwing_strings'
     no_unnecessary_brackets:           0
     quote_consistency:                 'prefer_single_quotes'
