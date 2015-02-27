@@ -8,40 +8,36 @@ linter      = require 'htmllint'
 lint_map =
   errors:
     #--- html + jade
-    no_attribute_dupes:                ['attr-no-dup', 'id-no-dup']
-    no_unsafe_attribute_characters:    'attr-no-unsafe-char'
+    no_attribute_dupes:             ['attr-no-dup', 'id-no-dup']
+    no_unsafe_attribute_characters: 'attr-no-unsafe-char'
 
   mandatory_warnings:
     #--- html + jade
-    html_lang_required:                'html-req-lang'
-    img_alt_required:                  'img-req-alt'
-    img_src_required:                  'img-req-src'
-    label_for_required:                'label-req-for'
-    lowercase_tag_names:               'tag-name-lowercase'
+    html_lang_required:             'html-req-lang'
+    img_alt_required:               'img-req-alt'
+    img_src_required:               'img-req-src'
+    label_for_required:             'label-req-for'
+    lowercase_tag_names:            'tag-name-lowercase'
 
   enabled_warnings:
     #--- general
-    file_end_newline:                  true
-    indentation:                       {name:  'indent-width',
-                                        value: [false, 2, 4]}
-    line_end:                          true
-    line_end_whitespace:               true
-    no_tabs:                           {name:  'indent-style',
-                                        value: [false, 'spaces']}
+    file_end_newline:               true
+    indentation:                    {name: 'indent-width', value: [false, 2, 4]}
+    line_end:                       true
+    line_end_whitespace:            true
+    no_tabs:                        {name:  'indent-style',
+                                     value: [false, 'spaces']}
 
     #--- html + jade
-    quote_consistency:                 {name: 'attr-quote-style',
-                                        value: [false, 'quoted']}
-
-    #--- jade only
-    no_comma_separated_attributes:     0
+    quote_consistency:              {name: 'attr-quote-style',
+                                     value: [false, 'quoted']}
 
   disabled_warnings:
     #--- general
-    max_line_length:                   true
+    max_line_length:                true
 
     #--- html + jade
-    no_implicit_attribute_value:       'attr-req-value'
+    no_implicit_attribute_value:    'attr-req-value'
 
   disabled_rules: ['attr-bans'
                    'attr-name-style'
