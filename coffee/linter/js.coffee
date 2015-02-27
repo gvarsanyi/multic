@@ -40,7 +40,9 @@ lint_map =
   enabled_warnings:
     #--- general
     file_end_newline:                  true
-    indentation:                       {name: 'indent', value: [false, 2, 4]}
+    indentation:
+      name:  'indent'
+      value: [false, 2, 4]
     line_end:                          true
     line_end_whitespace:               true
     no_tabs:                           0

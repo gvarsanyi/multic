@@ -10,6 +10,7 @@ lint_map =
     #--- html + jade
     no_attribute_dupes:             ['attr-no-dup', 'id-no-dup']
     no_unsafe_attribute_characters: 'attr-no-unsafe-char'
+    tag_name_match:                 'tag-name-match'
 
   mandatory_warnings:
     #--- html + jade
@@ -22,15 +23,19 @@ lint_map =
   enabled_warnings:
     #--- general
     file_end_newline:               true
-    indentation:                    {name: 'indent-width', value: [false, 2, 4]}
+    indentation:
+      name:  'indent-width'
+      value: [false, 2, 4]
     line_end:                       true
     line_end_whitespace:            true
-    no_tabs:                        {name:  'indent-style',
-                                     value: [false, 'spaces']}
+    no_tabs:
+      name:  'indent-style'
+      value: [false, 'spaces']
 
     #--- html + jade
-    quote_consistency:              {name: 'attr-quote-style',
-                                     value: [false, 'quoted']}
+    quote_consistency:
+      name: 'attr-quote-style'
+      value: [false, 'quoted']
 
   disabled_warnings:
     #--- general

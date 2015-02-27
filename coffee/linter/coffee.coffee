@@ -28,21 +28,24 @@ lint_map =
   enabled_warnings:
     #--- general
     file_end_newline:                  true
-    indentation:                       {name:     'indentation',
-                                        property: 'indentation',
-                                        value:    [false, 2, 4]}
+    indentation:
+      name:     'indentation'
+      property: 'indentation'
+      value:    [false, 2, 4]
     line_end:                          true
     line_end_whitespace:               true
     no_tabs:                           'no_tabs'
 
     #--- js + coffee
-    braces_spacing:                    {name:     'braces_spacing',
-                                        property: 'spacing',
-                                        values:   [false, 0, 1]}
+    braces_spacing:
+      name:     'braces_spacing'
+      property: 'spacing'
+      values:   [false, 0, 1]
     camel_case_classes:                'camel_case_classes'
-    colon_assignment_spacing:          {name:     'colon_assignment_spacing',
-                                        property: ['spacing', 'left'],
-                                        values:   [false, 0]}
+    colon_assignment_spacing:
+      name:     'colon_assignment_spacing'
+      property: ['spacing', 'left']
+      values:   [false, 0]
     no_arguments_caller_or_callee:     0
     no_interpolation_in_single_quotes: 'no_interpolation_in_single_quotes'
     no_non_breaking_space:             0
