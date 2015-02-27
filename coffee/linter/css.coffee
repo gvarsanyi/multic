@@ -18,6 +18,7 @@ module.exports = (inf, cb) ->
       'unqualified-attributes':  true # Disallow unqualified attribute selectors
       'ids':                      true # Disallow IDs in selectors
       'important':                true # Disallow !important
+      'vendor-prefix':       true # Require standard property with vendor prefix
 
     data = linter inf.source, cfg
 
