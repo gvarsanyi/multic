@@ -1,21 +1,21 @@
 {
   "name": "multic",
-  "version": "0.4.6",
+  "version": "0.4.7",
   "description": "converged linter, compiler and minifier API for multiple web sources: jade, html, sass/scss, css, coffee-script, es6/6to5/babel, javascript/es5, html2js",
   "main": "js/multic.js",
   "scripts": {
     "test": "make test"
   },
   "dependencies": {
-    "babel": "^4.5.3",
-    "clean-css": "^3.0.10",
+    "babel": "^4.6.0",
+    "clean-css": "^3.1.1",
     "coffee-script": "^1.9.1",
     "coffeelint": "^1.9.2",
     "csslint": "^0.10.0",
     "html-minifier": "^0.7.0",
     "htmllint": "^0.2.3",
     "jade": "^1.9.2",
-    "jshint": "^2.6.0",
+    "jshint": "^2.6.2",
     "ng-html2js": "^2.0.0",
     "node-sass": "^2.0.1",
     "uglify-js": "^2.4.16"

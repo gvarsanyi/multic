@@ -6,7 +6,7 @@ test   = require '../simple-test'
 code = """
 <div id='id1' class='class1'>
   <h1>Hello</h1>
-  <h2>Bello</h2>
+  <h2>Hi</h2>
 </div>
 
 """
