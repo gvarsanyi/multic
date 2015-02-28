@@ -4,7 +4,7 @@ module.exports = {
     unix_line_end: true,
     no_attribute_dupes: ['attr-no-dup', 'id-no-dup'],
     no_unsafe_attribute_characters: 'attr-no-unsafe-char',
-    tag_name_match: 'tag-name-match'
+    tag_name_match: 0
   },
   mandatory_warnings: {
     html_lang_required: 'html-req-lang',

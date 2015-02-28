@@ -8,10 +8,5 @@ build:
 	@echo " -- done"
 
 test: build
-	@for FILE in `find test/ | grep .coffee | grep -v /mock/`; \
-	do \
-		echo "\n"$${FILE%.*}; \
-		node_modules/.bin/coffee $$FILE || exit 1; \
-	done;
-	@echo " -- done"
+	@./node_modules/.bin/mocha --require chai --compilers coffee:coffee-script/register --recursive
 	@rm -rf tmp/

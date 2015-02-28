@@ -21,6 +21,9 @@ module.exports = (inf, source_type, cb, next) ->
     warn: (pos, desc, title) ->
       inf.res.warnings.push new LintWarning inf, {}, pos, desc, title
 
+  factories.error.class = LintError
+  factories.warn.class  = LintWarning
+
   cfg  = {}
   todo = []
 

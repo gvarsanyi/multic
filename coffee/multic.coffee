@@ -21,6 +21,8 @@ module.exports = (src, options) ->
     err_arg1 = new Error 'Argument #2 `options` must be object type'
     options = {}
 
+  options ?= {}
+
   inf = {options}
 
   res = inf.res ?=
@@ -45,8 +47,8 @@ module.exports = (src, options) ->
 
     # read
     unless inf.source?
-      inf.options.file = path.resolve src
-      return fs.readFile inf.options.file, {encoding: 'utf8'}, (err, code) ->
+      options.file = path.resolve src
+      return fs.readFile options.file, {encoding: 'utf8'}, (err, code) ->
         if err
           errors.push err
         else

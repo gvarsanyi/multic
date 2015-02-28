@@ -24,6 +24,9 @@ module.exports = function(src, options) {
     err_arg1 = new Error('Argument #2 `options` must be object type');
     options = {};
   }
+  if (options == null) {
+    options = {};
+  }
   inf = {
     options: options
   };
@@ -48,8 +51,8 @@ module.exports = function(src, options) {
       return cb(errors[0], res);
     }
     if (inf.source == null) {
-      inf.options.file = path.resolve(src);
-      return fs.readFile(inf.options.file, {
+      options.file = path.resolve(src);
+      return fs.readFile(options.file, {
         encoding: 'utf8'
       }, function(err, code) {
         if (err) {

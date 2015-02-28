@@ -1,21 +1,15 @@
 
+parser = require '../../jade-nodes-parser'
+
+
 module.exports = (inf, source_type, msg_factory, title) ->
 
-  for node in inf.jadeNodes
+  for node in parser.tagsWithNoAttrValue inf.jadeNodes, 'img', 'alt', true
 
-    if node.name?.toLowerCase() is 'img'
+    desc = '`img` tag needs `alt` attribute with value'
+    if node.line?
+      pos = node.line - 1
 
-      found = false
-      for attr in node.attrs
-        if String(attr.name).toLowerCase() is 'alt' and attr.val
-          found = true
-          break
-
-      unless found
-
-        desc = '`img` tag needs `alt` attribute with value'
-        pos = if node.line? then node.line - 1 else null
-
-        msg_factory pos, desc, title
+    msg_factory pos, desc, title
 
   return

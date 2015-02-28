@@ -78,7 +78,7 @@ duplicate_key                      | ✓      | ✓      |      |      |      |
 no_empty_elements                  | ✓      | ✓      |      |      |      |
 no_attribute_dupes                 |        |        | ✓    | ✓    |      |
 no_unsafe_attribute_characters     |        |        | x    | ✓    |      |
-tag_name_match                     |        |        |      | ✓    |      |
+tag_name_match                     |        |        |      | x    |      |
 
 ## Warnings
 

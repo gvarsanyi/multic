@@ -8,7 +8,7 @@ module.exports =
     #--- html + jade
     no_attribute_dupes:             ['attr-no-dup', 'id-no-dup']
     no_unsafe_attribute_characters: 'attr-no-unsafe-char'
-    tag_name_match:                 'tag-name-match'
+    tag_name_match:                 0 # tag-name-match is buggy
 
   mandatory_warnings:
     #--- html + jade

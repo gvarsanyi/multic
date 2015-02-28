@@ -7,7 +7,7 @@
     "test": "make test"
   },
   "dependencies": {
-    "babel": "^4.6.0",
+    "babel": "^4.6.1",
     "clean-css": "^3.1.1",
     "coffee-script": "^1.9.1",
     "coffeelint": "^1.9.2",
@@ -16,7 +16,6 @@
     "htmllint": "^0.2.3",
     "jade": "^1.9.2",
     "jshint": "^2.6.2",
-    "mkdirp": "^0.5.0",
     "ng-html2js": "^2.0.0",
     "node-sass": "^2.0.1",
     "uglify-js": "^2.4.16"
@@ -54,5 +53,10 @@
   "bugs": {
     "url": "https://github.com/gvarsanyi/multic/issues"
   },
-  "homepage": "https://github.com/gvarsanyi/multic"
+  "homepage": "https://github.com/gvarsanyi/multic",
+  "devDependencies": {
+    "chai": "^2.1.0",
+    "mkdirp": "^0.5.0",
+    "mocha": "^2.1.0"
+  }
 }

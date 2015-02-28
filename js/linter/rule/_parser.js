@@ -24,6 +24,8 @@ module.exports = function(inf, source_type, cb, next) {
       return inf.res.warnings.push(new LintWarning(inf, {}, pos, desc, title));
     }
   };
+  factories.error["class"] = LintError;
+  factories.warn["class"] = LintWarning;
   cfg = {};
   todo = [];
   for (idea in map) {
