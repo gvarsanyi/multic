@@ -16,13 +16,10 @@
     "htmllint": "^0.2.3",
     "jade": "^1.9.2",
     "jshint": "^2.6.2",
+    "mkdirp": "^0.5.0",
     "ng-html2js": "^2.0.0",
     "node-sass": "^2.0.1",
     "uglify-js": "^2.4.16"
-  },
-  "devDependencies": {
-    "coffee-script": "1.9.1",
-    "mkdirp": "^0.5.0"
   },
   "repository": {
     "type": "git",
