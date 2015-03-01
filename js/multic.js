@@ -36,6 +36,11 @@ module.exports = function(src, options) {
     warnings: []
   };
   inf.ruleTmp = {};
+  if (options.file != null) {
+    if (!(typeof options.file === 'string' && (options.file = path.resolve(options.file)))) {
+      errors.push(new Error('options.file must be a valid URL string'));
+    }
+  }
   if (err_arg0) {
     errors.push(err_arg0);
   }

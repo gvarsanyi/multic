@@ -16,10 +16,10 @@ module.exports = (inf, source_type, cb, next) ->
   map = require '../map/' + source_type
 
   factories =
-    error: (pos, desc, title) ->
-      inf.res.errors.push new LintError inf, {}, pos, desc, title
-    warn: (pos, desc, title) ->
-      inf.res.warnings.push new LintWarning inf, {}, pos, desc, title
+    error: (pos, desc, title, file) ->
+      inf.res.errors.push new LintError inf, {file}, pos, desc, title
+    warn: (pos, desc, title, file) ->
+      inf.res.warnings.push new LintWarning inf, {file}, pos, desc, title
 
   factories.error.class = LintError
   factories.warn.class  = LintWarning

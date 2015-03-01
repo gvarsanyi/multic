@@ -17,11 +17,15 @@ module.exports = function(inf, source_type, cb, next) {
   var base, base1, base2, cfg, factories, i, idea, item, keys, len, level, map, multic_linter, name, name1, pos, property, ref, ref1, rule, rules, title, todo, v, value, values;
   map = require('../map/' + source_type);
   factories = {
-    error: function(pos, desc, title) {
-      return inf.res.errors.push(new LintError(inf, {}, pos, desc, title));
+    error: function(pos, desc, title, file) {
+      return inf.res.errors.push(new LintError(inf, {
+        file: file
+      }, pos, desc, title));
     },
-    warn: function(pos, desc, title) {
-      return inf.res.warnings.push(new LintWarning(inf, {}, pos, desc, title));
+    warn: function(pos, desc, title, file) {
+      return inf.res.warnings.push(new LintWarning(inf, {
+        file: file
+      }, pos, desc, title));
     }
   };
   factories.error["class"] = LintError;

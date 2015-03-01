@@ -49,7 +49,7 @@ module.exports = function(inf, cb) {
   try {
     orig_warn = console.warn;
     console.warn = function() {
-      var desc, i, item, len, line, msg, msgs, pos, spos;
+      var desc, file, fpos, i, item, len, line, mock, msg, msgs, pos, spos;
       msgs = 1 <= arguments.length ? slice.call(arguments, 0) : [];
       msg = [];
       for (i = 0, len = msgs.length; i < len; i++) {
@@ -59,9 +59,17 @@ module.exports = function(inf, cb) {
       msg = msg.join();
       if (msg.substr(0, 9) === 'Warning: ' && ((spos = msg.indexOf(' for line ')) > -1 || (spos = msg.indexOf(' on line ')) > -1)) {
         desc = msg.substr(9, spos);
+        if (-1 < (fpos = msg.lastIndexOf(' file "'))) {
+          file = msg.substr(fpos + 7);
+          file = file.substr(0, file.length - 1);
+        }
         line = msg.substr(spos + 1).split(' ')[2];
         pos = CompilationWarning.parsePos(line, null, -1);
-        return inf.res.warnings.push(new CompilationWarning(inf, msg, pos, desc));
+        mock = {
+          file: file,
+          message: msg
+        };
+        return inf.res.warnings.push(new CompilationWarning(inf, mock, pos, desc));
       } else {
         return inf.res.warnings.push(new CompilationWarning(inf, msg));
       }

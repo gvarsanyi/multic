@@ -1,4 +1,8 @@
 
+fs   = require 'fs'
+path = require 'path'
+
+
 intify = (n) ->
   unless String(n) is String(n).replace /[^0-9]/, ''
     return
@@ -27,9 +31,15 @@ class MulticError extends Error
         orig_name = null
 
     @title = title or orig_name or @constructor.name
+    @file  = inf.options.file
 
-    if inf.options.file
-      @file = inf.options.file
+    if inf.options.file and (errfile = err?.file or err?.path) and
+    (errfile = path.resolve errfile) isnt inf.options.file
+      @file = errfile
+      try
+        override_source = fs.readFileSync errfile, {encoding: 'utf8'}
+      catch
+        line = column = null
 
     if (line_n = intify line)?
       @line = line_n
@@ -37,8 +47,10 @@ class MulticError extends Error
       if (column_n = intify column)?
         @column = column_n
 
+      source = override_source or inf.source
+
       from = Math.max 0, line_n - 5
-      if (sourcelines = inf.source?.split('\n')[from .. line_n + 5])?.length
+      if (sourcelines = source?.split('\n')[from .. line_n + 5])?.length
         for line_literal, i in sourcelines
           (@sourceLines ?= {})[from + i] = line_literal
 

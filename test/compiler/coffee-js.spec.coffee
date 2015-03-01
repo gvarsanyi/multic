@@ -25,8 +25,11 @@ describe 'Compiler: coffee-js', ->
       expect(err)
       .not.to.be.ok
 
+      expect(res.compiled.indexOf('->'))
+      .to.equal -1, 'Not compiled'
+
       expect(res.compiled.split('\n').length)
-      .not.to.be.lt 3, 'Not pretty'
+      .to.be.gt 3, 'Not pretty'
 
 
   it 'error handling', (done) ->
@@ -54,7 +57,7 @@ describe 'Compiler: coffee-js', ->
           .to.be.equal -1, 'Not compiled'
 
           expect(res.compiled.split('\n').length)
-          .not.to.be.lt 3, 'Not pretty'
+          .to.be.gt 3, 'Not pretty'
 
 
   it 'lint from file', (done) ->

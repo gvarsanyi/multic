@@ -50,10 +50,16 @@ module.exports = (inf, cb) ->
        (spos = msg.indexOf ' on line ') > -1)
         desc = msg.substr 9, spos
 
+        if -1 < fpos = msg.lastIndexOf ' file "'
+          file = msg.substr fpos + 7
+          file = file.substr 0, file.length - 1
+
         line = msg.substr(spos + 1).split(' ')[2]
         pos = CompilationWarning.parsePos line, null, -1
 
-        inf.res.warnings.push new CompilationWarning inf, msg, pos, desc
+        mock = {file, message: msg}
+
+        inf.res.warnings.push new CompilationWarning inf, mock, pos, desc
       else
         inf.res.warnings.push new CompilationWarning inf, msg
 

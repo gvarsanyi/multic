@@ -10,6 +10,6 @@ module.exports = (inf, source_type, msg_factory, title) ->
     if node.line?
       pos = node.line - 1
 
-    msg_factory pos, desc, title
+    msg_factory pos, desc, title, node.filename
 
   return

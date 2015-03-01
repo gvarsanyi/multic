@@ -32,6 +32,11 @@ module.exports = (src, options) ->
 
   inf.ruleTmp = {}
 
+  if options.file?
+    unless typeof options.file is 'string' and
+    options.file = path.resolve options.file
+      errors.push new Error 'options.file must be a valid URL string'
+
   if err_arg0
     errors.push err_arg0
   if err_arg1

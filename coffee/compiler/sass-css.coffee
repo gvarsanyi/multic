@@ -1,6 +1,7 @@
 
 CompilationError = require '../error/compilation-error'
 compiler         = require 'node-sass'
+fs               = require 'fs'
 path             = require 'path'
 
 
@@ -17,9 +18,7 @@ module.exports = (inf, cb) ->
 
       error: (err) ->
         pos = CompilationError.parsePos err.line, err.column, -1, -1
-
         inf.res.errors.push new CompilationError inf, err, pos
-
         cb()
 
       success: (res) ->
