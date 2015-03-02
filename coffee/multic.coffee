@@ -1,9 +1,12 @@
 
-fs   = require 'fs'
-path = require 'path'
+MulticProcess = require './multic-process'
 
 
-sources =
+READ    = 1
+COMPILE = 2
+MINIFY  = 4
+
+source_to_target_types =
   coffee: ['js']
   css:    ['min']
   es6:    ['js']
@@ -14,104 +17,47 @@ sources =
 
 
 module.exports = (src, options) ->
-  unless typeof src is 'string'
-    err_arg0 = new Error 'Argument #1 `source` must be string type'
 
-  if options? and typeof options isnt 'object'
-    err_arg1 = new Error 'Argument #2 `options` must be object type'
-    options = {}
-
-  options ?= {}
-
-  inf = {options}
-
-  res = inf.res ?=
-    errors: errors = []
-    includes: []
-    warnings: []
-
-  inf.ruleTmp = {}
-
-  if options.file?
-    unless typeof options.file is 'string' and
-    options.file = path.resolve options.file
-      errors.push new Error 'options.file must be a valid URL string'
-
-  if err_arg0
-    errors.push err_arg0
-  if err_arg1
-    errors.push err_arg1
-
-
-  process = (lint_inf, compile_inf, minify_inf, cb) ->
-    unless typeof cb is 'function'
-      throw new Error 'Argument #1 (only argument) must be a callback function'
-
-    if errors.length
-      return cb errors[0], res
-
-    # read
-    unless inf.source?
-      options.file = path.resolve src
-      return fs.readFile options.file, {encoding: 'utf8'}, (err, code) ->
-        if err
-          errors.push err
-        else
-          inf.source = res.source = code
-        process lint_inf, compile_inf, minify_inf, cb
-
-    # lint
-    if lint_inf and (inf.lint or not inf.lint?)
-      inf.lint = false
-      return require('./linter/' + lint_inf) inf, ->
-        process lint_inf, compile_inf, minify_inf, cb
-
-    # compile
-    if compile_inf and not res.compiled?
-      {source, target} = compile_inf
-      return require('./compiler/' + source + '-' + target) inf, ->
-        unless typeof res.compiled is 'string'
-          res.compiled = ''
-        process lint_inf, compile_inf, minify_inf, cb
-
-    # minify
-    if minify_inf and not res.minified?
-      if res.compiled
-        inf.source = res.compiled
-      return require('./minifier/' + minify_inf) inf, ->
-        unless typeof res.minified is 'string'
-          res.minified = ''
-        process lint_inf, compile_inf, minify_inf, cb
-
-    cb null, res
-
+  inf = new MulticProcess src, options
 
   iface = {file: {}}
-  for source, targets of sources
-    for target in targets
-      do (source, target) ->
-        iface[source] ?= (cb) ->
-          inf.source = src
-          process source, false, false, cb
-        iface.file[source] ?= (cb) ->
-          process source, false, false, cb
 
-        sfn = (iface[source] ?= {})[target] = (cb) ->
-          inf.source = src
-          if target is 'min'
-            return process source, false, source, cb
-          process source, {source, target}, false, cb
-        unless target is 'min'
+  for source_type, target_types of source_to_target_types
+    for target_type in target_types
+      do (source_type, target_type) ->
+
+        iface[source_type] ?= (cb) ->
+          # multic(src).js (err, req) ->
+          inf.process 0, source_type, source_type, cb
+
+        iface.file[source_type] ?= (cb) ->
+          # multic(path).file.js (err, req) ->
+          inf.process READ, source_type, source_type, cb
+
+        sfn = (iface[source_type] ?= {})[target_type] = (cb) ->
+          if target_type is 'min'
+            # multic(src).js.min (err, req) ->
+            return inf.process MINIFY, source_type, source_type, cb
+
+          # multic(src).coffee.js (err, req) ->
+          inf.process COMPILE, source_type, target_type, cb
+
+        unless target_type is 'min'
           sfn.min = (cb) ->
-            inf.source = src
-            process source, {source, target}, target, cb
+            # multic(src).coffee.js.min (err, req) ->
+            inf.process COMPILE|MINIFY source_type, target_type, cb
 
-        ffn = (iface.file[source] ?= {})[target] = (cb) ->
-          if target is 'min'
-            return process source, false, source, cb
-          process source, {source, target}, false, cb
-        unless target is 'min'
+        ffn = (iface.file[source_type] ?= {})[target_type] = (cb) ->
+          if target_type is 'min'
+            # multic(src).file.js.min (err, req) ->
+            return inf.process READ|MINIFY source_type, source_type, cb
+
+          # multic(src).file.coffee.js (err, req) ->
+          inf.process READ|COMPILE, source_type, target_type, cb
+
+        unless target_type is 'min'
+          # multic(src).file.coffee.js.min (err, req) ->
           ffn.min = (cb) ->
-            process source, {source, target}, target, cb
+            inf.process READ|COMPILE|MINIFY, source_type, target_type, cb
 
   iface
