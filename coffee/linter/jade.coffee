@@ -5,7 +5,8 @@ rule_parser   = require './rule/_parser'
 
 module.exports = (inf, cb) ->
 
-  inf.jadeNodes = []
+  inf.sourceMap = []
+  inf.includeSources = {}
   jade_compiler inf, ->
     inf.compiledJade = inf.res.compiled
     delete inf.res.compiled

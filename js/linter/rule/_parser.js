@@ -14,24 +14,38 @@ levels = {
 };
 
 module.exports = function(inf, source_type, cb, next) {
-  var base, base1, base2, cfg, factories, i, idea, item, keys, len, level, map, multic_linter, name, name1, pos, property, ref, ref1, rule, rules, title, todo, v, value, values;
+  var base, cfg, file, i, idea, item, j, keys, len, len1, level, map, multic_linter, name, name1, pos, prop_lint, property, ref, ref1, ref2, rule, rules, todo, v, value, values;
   map = require('../map/' + source_type);
-  factories = {
-    error: function(pos, desc, title, file) {
-      return inf.res.errors.push(new LintError(inf, {
-        file: file
-      }, pos, desc, title));
-    },
-    warn: function(pos, desc, title, file) {
-      return inf.res.warnings.push(new LintWarning(inf, {
-        file: file
-      }, pos, desc, title));
-    }
-  };
-  factories.error["class"] = LintError;
-  factories.warn["class"] = LintWarning;
   cfg = {};
   todo = [];
+  prop_lint = function(rule_module, subtype, rule, level, file) {
+    var msg_class, msg_factory, ref1, source, target, title;
+    title = rule[0].toUpperCase() + rule.substr(1).split('_').join(' ');
+    target = {
+      error: 'errors',
+      warn: 'warnings'
+    }[level];
+    msg_class = {
+      error: LintError,
+      warn: LintWarning
+    }[level];
+    msg_factory = function(desc, line, col, msg_file) {
+      var mock;
+      mock = {};
+      if (msg_file != null ? msg_file : msg_file = file) {
+        mock.file = msg_file;
+      }
+      return inf.res[target].push(new msg_class(inf, mock, [line, col], desc, title));
+    };
+    msg_factory["class"] = msg_class;
+    if (subtype === 'map') {
+      return multic_linter.map(msg_factory, inf.sourceMap, inf.options[rule]);
+    } else if (file == null) {
+      return multic_linter.source(msg_factory, inf.source, inf.options[rule]);
+    } else if (source = (ref1 = inf.includeSources) != null ? ref1[file] : void 0) {
+      return multic_linter.source(msg_factory, source, inf.options[rule]);
+    }
+  };
   for (idea in map) {
     rules = map[idea];
     for (rule in rules) {
@@ -46,20 +60,26 @@ module.exports = function(inf, source_type, cb, next) {
       if (ref === true) {
         if (level !== 'ignore') {
           multic_linter = require('./' + rule);
-          title = rule[0].toUpperCase() + rule.substr(1).split('_').join(' ');
-          if ((base = ((base1 = inf.ruleTmp)[source_type] != null ? base1[source_type] : base1[source_type] = {})).lines == null) {
-            base.lines = inf.source.split('\n');
+          if (multic_linter.map) {
+            prop_lint(multic_linter, 'map', rule, level);
           }
-          multic_linter(inf, source_type, factories[level], title, inf.ruleTmp[source_type].lines);
+          if (multic_linter.source) {
+            prop_lint(multic_linter, 'source', rule, level);
+            ref1 = inf.res.includes;
+            for (i = 0, len = ref1.length; i < len; i++) {
+              file = ref1[i];
+              prop_lint(multic_linter, 'source', rule, level, file);
+            }
+          }
           if (inf.res.errors.length) {
             return cb(inf.res.errors[0]);
           }
         }
         continue;
       }
-      ref1 = (Array.isArray(ref) ? ref : [ref]);
-      for (i = 0, len = ref1.length; i < len; i++) {
-        item = ref1[i];
+      ref2 = (Array.isArray(ref) ? ref : [ref]);
+      for (j = 0, len1 = ref2.length; j < len1; j++) {
+        item = ref2[j];
         if (typeof item === 'string') {
           name = item;
           keys = null;
@@ -90,7 +110,7 @@ module.exports = function(inf, source_type, cb, next) {
           };
           if (keys && value !== true && value !== false) {
             if (keys.length === 2) {
-              ((base2 = cfg[name])[name1 = keys[0]] != null ? base2[name1] : base2[name1] = {})[keys[1]] = value;
+              ((base = cfg[name])[name1 = keys[0]] != null ? base[name1] : base[name1] = {})[keys[1]] = value;
             } else {
               cfg[name][keys[0]] = value;
             }

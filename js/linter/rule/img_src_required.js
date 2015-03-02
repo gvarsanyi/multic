@@ -3,15 +3,15 @@ var parser;
 
 parser = require('../../jade-nodes-parser');
 
-module.exports = function(inf, source_type, msg_factory, title) {
-  var desc, i, len, node, pos, ref;
-  ref = parser.tagsWithNoAttrValue(inf.jadeNodes, 'img', 'src');
+module.exports.map = function(msg_factory, map) {
+  var desc, i, len, line, node, ref;
+  ref = parser.tagsWithNoAttrValue(map, 'img', 'src');
   for (i = 0, len = ref.length; i < len; i++) {
     node = ref[i];
     desc = '`img` tag needs `src` attribute with value';
     if (node.line != null) {
-      pos = node.line - 1;
+      line = node.line - 1;
     }
-    msg_factory(pos, desc, title, node.filename);
+    msg_factory(desc, line, null, node.filename);
   }
 };

@@ -2,14 +2,15 @@
 parser = require '../../jade-nodes-parser'
 
 
-module.exports = (inf, source_type, msg_factory, title) ->
+module.exports.map = (msg_factory, map) ->
 
-  for node in parser.tagsWithNoAttrValue inf.jadeNodes, 'img', 'src'
+  for node in parser.tagsWithNoAttrValue map, 'img', 'src'
 
     desc = '`img` tag needs `src` attribute with value'
-    if node.line?
-      pos = node.line - 1
 
-    msg_factory pos, desc, title, node.filename
+    if node.line?
+      line = node.line - 1
+
+    msg_factory desc, line, null, node.filename
 
   return

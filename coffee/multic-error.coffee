@@ -67,7 +67,8 @@ class MulticError extends Error
     null
 
 
-  @posByIndex: (lines, col) ->
+  @posByIndex: (source, col) ->
+    lines = source.split '\n'
     line = 0
     while lines[line]? and col > len = lines[line].length
       col -= len + 1

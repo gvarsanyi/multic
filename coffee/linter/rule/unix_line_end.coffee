@@ -1,12 +1,9 @@
 
-LintError = require '../../error/lint-error'
+module.exports.source = (msg_factory, source) ->
 
-
-module.exports = (inf, source_type, msg_factory, title, lines) ->
-
-  if -1 < pos = inf.source.indexOf '\r'
+  if -1 < pos = source.indexOf '\r'
 
     desc = 'CR (\\r) character found'
-    pos = LintError.posByIndex lines, pos
+    [line, col] = msg_factory.class.posByIndex source, pos
 
-    msg_factory pos, desc, title
+    msg_factory desc, line, col

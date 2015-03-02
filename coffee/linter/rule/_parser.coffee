@@ -15,17 +15,30 @@ module.exports = (inf, source_type, cb, next) ->
 
   map = require '../map/' + source_type
 
-  factories =
-    error: (pos, desc, title, file) ->
-      inf.res.errors.push new LintError inf, {file}, pos, desc, title
-    warn: (pos, desc, title, file) ->
-      inf.res.warnings.push new LintWarning inf, {file}, pos, desc, title
-
-  factories.error.class = LintError
-  factories.warn.class  = LintWarning
-
   cfg  = {}
   todo = []
+
+
+  prop_lint = (rule_module, subtype, rule, level, file) ->
+    title = rule[0].toUpperCase() + rule.substr(1).split('_').join ' '
+
+    target    = {error: 'errors', warn: 'warnings'}[level]
+    msg_class = {error: LintError, warn: LintWarning}[level]
+
+    msg_factory = (desc, line, col, msg_file) ->
+      mock = {}
+      if msg_file ?= file
+        mock.file = msg_file
+      inf.res[target].push new msg_class inf, mock, [line, col], desc, title
+    msg_factory.class = msg_class
+
+    if subtype is 'map'
+      multic_linter.map msg_factory, inf.sourceMap, inf.options[rule]
+    else unless file?
+      multic_linter.source msg_factory, inf.source, inf.options[rule]
+    else if source = inf.includeSources?[file]
+      multic_linter.source msg_factory, source, inf.options[rule]
+
 
   for idea, rules of map
 
@@ -42,12 +55,13 @@ module.exports = (inf, source_type, cb, next) ->
         unless level is 'ignore'
           multic_linter = require './' + rule
 
-          title = rule[0].toUpperCase() + rule.substr(1).split('_').join ' '
+          if multic_linter.map
+            prop_lint multic_linter, 'map', rule, level
 
-          (inf.ruleTmp[source_type] ?= {}).lines ?= inf.source.split '\n'
-
-          multic_linter inf, source_type, factories[level], title,
-                        inf.ruleTmp[source_type].lines
+          if multic_linter.source
+            prop_lint multic_linter, 'source', rule, level
+            for file in inf.res.includes
+              prop_lint multic_linter, 'source', rule, level, file
 
           if inf.res.errors.length
             return cb inf.res.errors[0]

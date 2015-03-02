@@ -1,7 +1,7 @@
 
-module.exports = (inf, source_type, msg_factory, title, lines) ->
+module.exports.source = (msg_factory, source, rule_value) ->
 
-  maxlen = inf.options.max_line_length
+  maxlen = rule_value
   if maxlen is true
     maxlen = 80
   else
@@ -10,9 +10,11 @@ module.exports = (inf, source_type, msg_factory, title, lines) ->
   unless maxlen > 0
     return
 
-  for line, i in lines when line.length > maxlen
+
+  for line, i in source.split('\n') when line.length > maxlen
 
     desc = 'Line length exceeds allowed maximum of ' + maxlen + ' characters'
-    msg_factory [i, maxlen], desc, title
+
+    msg_factory desc, i, maxlen
 
   return

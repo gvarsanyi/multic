@@ -88,8 +88,9 @@ MulticError = (function(superClass) {
     return null;
   };
 
-  MulticError.posByIndex = function(lines, col) {
-    var len, line;
+  MulticError.posByIndex = function(source, col) {
+    var len, line, lines;
+    lines = source.split('\n');
     line = 0;
     while ((lines[line] != null) && col > (len = lines[line].length)) {
       col -= len + 1;

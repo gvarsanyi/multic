@@ -6,7 +6,8 @@ jade_compiler = require('../compiler/jade-html');
 rule_parser = require('./rule/_parser');
 
 module.exports = function(inf, cb) {
-  inf.jadeNodes = [];
+  inf.sourceMap = [];
+  inf.includeSources = {};
   return jade_compiler(inf, function() {
     inf.compiledJade = inf.res.compiled;
     delete inf.res.compiled;
