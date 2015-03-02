@@ -1,6 +1,6 @@
 
+CoffeeScript     = require 'coffee-script'
 CompilationError = require '../error/compilation-error'
-compiler         = require 'coffee-script'
 
 
 module.exports = (inf, cb) ->
@@ -10,7 +10,7 @@ module.exports = (inf, cb) ->
     if inf.options.file
       opts.filename = inf.options.file
 
-    inf.res.compiled = compiler.compile inf.source, opts
+    inf.res.compiled = CoffeeScript.compile inf.source, opts
 
     # coffee-script does not seem to support warnings
     # coffee-script does not have includes

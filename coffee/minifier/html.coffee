@@ -1,6 +1,6 @@
 
+HtmlMinifier      = require 'html-minifier'
 MinificationError = require '../error/minification-error'
-minifier          = require 'html-minifier'
 
 
 module.exports = (inf, cb) ->
@@ -17,7 +17,7 @@ module.exports = (inf, cb) ->
       minifyJS:                  true
       minifyCSS:                 true
 
-    inf.res.minified = minifier.minify inf.source, cfg
+    inf.res.minified = HtmlMinifier.minify inf.source, cfg
 
   catch err
 

@@ -1,7 +1,7 @@
 
+CssLint     = require('csslint').CSSLint
 LintError   = require '../error/lint-error'
 LintWarning = require '../warning/lint-warning'
-linter      = require('csslint').CSSLint.verify
 rule_parser = require './rule/_parser'
 
 
@@ -11,7 +11,7 @@ module.exports = (inf, cb) ->
 
     try
 
-      data = linter inf.source, cfg
+      data = CssLint.verify inf.source, cfg
 
       for msg in data?.messages
         pos = LintError.parsePos msg.line, msg.col, -1, -1

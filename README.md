@@ -109,13 +109,14 @@ WARNING! Although these properties are available most of the time, keep in mind 
 - some exotic errors may not have anything but message (and file if source is loaded from file or you sp)
 
 ## Options
-- `file` - file path for source string
+### `file` file path for source string
 
     // This is useful for error messages and to
     // define include path start point for jade and sass includes/imports
     multic(source_string, {file: '*path/to/my/source/file.ext*'}).min(callback);
 
-- Configurable lint rules ([comprehensive list of rules](docs/lint-rules.md))
+### Configurable lint rules
+See the [comprehensive table of lint rules](docs/lint-rules.md))
 
     multic(source_file_path, {
       max_line_length:  80,

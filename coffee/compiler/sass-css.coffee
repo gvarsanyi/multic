@@ -1,6 +1,6 @@
 
 CompilationError = require '../error/compilation-error'
-compiler         = require 'node-sass'
+NodeSass         = require 'node-sass'
 fs               = require 'fs'
 path             = require 'path'
 
@@ -34,7 +34,7 @@ module.exports = (inf, cb) ->
       opts.file = inf.options.file
       pathes.push path.resolve path.dirname(inf.options.file) + '/'
 
-    compiler.render opts
+    NodeSass.render opts
 
   catch err
     inf.res.errors.push new CompilationError inf, err

@@ -1,35 +1,14 @@
 
 CompilationError   = require '../error/compilation-error'
 CompilationWarning = require '../warning/compilation-warning'
-compiler           = require 'jade'
-path               = require 'path'
+Jade               = require 'jade'
 util               = require 'util'
 
 
-# patch jade to provide includes
-compiler.Parser::_parseInclude = compiler.Parser::parseInclude
-compiler.Parser::parseInclude = ->
-  if Array.isArray @options?.includes
-    tok   = @peek()
-    ipath = path.resolve @resolvePath tok.val.trim(), 'include'
-
-    unless ipath in @options.includes
-      @options.includes.push ipath
-
-  @_parseInclude()
+require '../patch/jade-patch'
 
 
-# expose parsed nodes
-compiler.Parser::_parseExpr = compiler.Parser::parseExpr
-compiler.Parser::parseExpr = ->
-  expr = @_parseExpr()
-
-  if Array.isArray @options?.nodes
-    @options?.nodes.push expr
-
-  expr
-
-
+console.log 'Jade.Parser::parseInclude', Jade.Parser::parseInclude
 
 module.exports = (inf, cb) ->
 
@@ -74,7 +53,7 @@ module.exports = (inf, cb) ->
     if Array.isArray inf.jadeNodes
       cfg.nodes = inf.jadeNodes
 
-    inf.res.compiled = compiler.render inf.source, cfg
+    inf.res.compiled = Jade.render inf.source, cfg
 
     console.warn = orig_warn
 

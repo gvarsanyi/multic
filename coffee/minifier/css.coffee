@@ -1,12 +1,12 @@
 
+CleanCss          = require 'clean-css'
 MinificationError = require '../error/minification-error'
-minifier          = require 'clean-css'
 
 
 module.exports = (inf, cb) ->
 
   try
-    res = (new minifier {}).minify inf.source
+    res = (new CleanCss {}).minify inf.source
 
     for err in res.errors or []
       inf.res.errors.push new MinificationError inf, err

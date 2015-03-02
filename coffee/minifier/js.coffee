@@ -1,12 +1,12 @@
 
 MinificationError = require '../error/minification-error'
-minifier          = require 'uglify-js'
+UglifyJs          = require 'uglify-js'
 
 
 module.exports = (inf, cb) ->
 
   try
-    inf.res.minified = minifier.minify(inf.source, {fromString: true}).code
+    inf.res.minified = UglifyJs.minify(inf.source, {fromString: true}).code
 
     # uglify-js does not seem to support warnings
 

@@ -1,7 +1,7 @@
 
 LintError   = require '../error/lint-error'
 LintWarning = require '../warning/lint-warning'
-linter      = require('jshint').JSHINT
+jshint      = require('jshint').JSHINT
 rule_parser = require './rule/_parser'
 
 
@@ -13,9 +13,9 @@ module.exports = (inf, cb) ->
 
     try
 
-      linter inf.source, cfg
+      jshint inf.source, cfg
 
-      for msg in linter.data()?.errors or []
+      for msg in jshint.data()?.errors or []
         pos = LintError.parsePos msg.line, msg.character, -1, -1
 
 #         if msg.code is 'W117' and inf.allowGlobals

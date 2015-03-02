@@ -1,7 +1,7 @@
 
+CoffeeLint  = require 'coffeelint'
 LintError   = require '../error/lint-error'
 LintWarning = require '../warning/lint-warning'
-linter      = require('coffeelint').lint
 rule_parser = require './rule/_parser'
 
 
@@ -10,8 +10,9 @@ module.exports = (inf, cb) ->
   rule_parser inf, 'coffee', cb, (cfg) ->
 
     try
+      messages = CoffeeLint.lint inf.source, cfg
 
-      for msg in linter inf.source, cfg
+      for msg in messages
         rule = if msg.rule then '[' + msg.rule + '] ' else ''
 
         if typeof msg.message is 'string'

@@ -1,6 +1,6 @@
 
+Babel            = require 'babel'
 CompilationError = require '../error/compilation-error'
-compiler         = require 'babel'
 
 
 module.exports = (inf, cb) ->
@@ -10,7 +10,7 @@ module.exports = (inf, cb) ->
     if inf.options.file
       opts.filename = inf.options.file
 
-    inf.res.compiled = (compiler.transform inf.source, opts).code
+    inf.res.compiled = (Babel.transform inf.source, opts).code
 
     # babel does not seem to support warnings
     # babel does not have includes (not ones that would pull in contents anyway)
