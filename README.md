@@ -110,10 +110,12 @@ WARNING! Although these properties are available most of the time, keep in mind 
 
 ## Options
 ### `file` file path for source string
-
-    // This is useful for error messages and to
-    // define include path start point for jade and sass includes/imports
+This is useful for error messages and to define include path start point for jade and sass includes/imports
     multic(source_string, {file: '*path/to/my/source/file.ext*'}).min(callback);
+
+### `moduleName` string for Angulat module generator (`html.js` and `jade.js` compilers)
+This is useful for error messages and to define include path start point for jade and sass includes/imports
+    multic(source_string, {moduleName: 'name.space.joe'}).html.js(callback);
 
 ### Configurable lint rules
 See the [comprehensive table of lint rules](docs/lint-rules.md))
