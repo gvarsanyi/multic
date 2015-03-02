@@ -7,6 +7,10 @@ path             = require 'path'
 
 module.exports = (inf, cb) ->
 
+  if inf.compiledSass?
+    inf.res.compiled = inf.compiledSass
+    return cb()
+
   try
     stats = {}
 
@@ -28,7 +32,20 @@ module.exports = (inf, cb) ->
         # node-sass does not seem to support warnings
 
         inf.res.compiled = res.css
-        cb()
+
+        unless inf.includeSources and typeof inf.includeSources is 'object' and
+        includes?.length
+          return cb()
+        loaded = 0
+        for include in includes
+          do (include) ->
+            fs.readFile include, {encoding: 'utf8'}, (err, data) ->
+              if typeof data is 'string' and not err
+                inf.includeSources[include] = data
+              loaded += 1
+              if loaded >= includes.length
+                cb()
+        return
 
     if inf.options.file
       opts.file = inf.options.file

@@ -20,13 +20,12 @@ BODY {
 
 """
 
-
 code_inc = """
 $primary-color: #f00;
 
 SPAN { font-size: 13px; }
-"""
 
+"""
 
 
 opts = file: 'src/test.scss'
@@ -79,7 +78,7 @@ describe 'Compiler: sass-css', ->
 
   it 'include error handling', (done) ->
     mkdirp 'tmp/', {mode: '0777'}, (err) ->
-      fs.writeFile 'tmp/_sassinc2.scss', code_inc + '\nErrLn}\n', (err) ->
+      fs.writeFile 'tmp/_sassinc2.scss', code_inc + 'ErrLn}\n', (err) ->
 
         code2 = code.split '\n'
         code2[1] = '@import \'../tmp/_sassinc2\';'

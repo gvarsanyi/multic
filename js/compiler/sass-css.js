@@ -11,6 +11,10 @@ path = require('path');
 
 module.exports = function(inf, cb) {
   var err, opts, pathes, stats;
+  if (inf.compiledSass != null) {
+    inf.res.compiled = inf.compiledSass;
+    return cb();
+  }
   try {
     stats = {};
     pathes = [];
@@ -25,12 +29,32 @@ module.exports = function(inf, cb) {
         return cb();
       },
       success: function(res) {
-        var includes, ref, ref1, ref2;
+        var fn, i, include, includes, len, loaded, ref, ref1, ref2;
         if ((ref = (includes = res != null ? (ref1 = res.stats) != null ? ref1.includedFiles : void 0 : void 0)) != null ? ref.length : void 0) {
           (ref2 = inf.res.includes).push.apply(ref2, includes);
         }
         inf.res.compiled = res.css;
-        return cb();
+        if (!(inf.includeSources && typeof inf.includeSources === 'object' && (includes != null ? includes.length : void 0))) {
+          return cb();
+        }
+        loaded = 0;
+        fn = function(include) {
+          return fs.readFile(include, {
+            encoding: 'utf8'
+          }, function(err, data) {
+            if (typeof data === 'string' && !err) {
+              inf.includeSources[include] = data;
+            }
+            loaded += 1;
+            if (loaded >= includes.length) {
+              return cb();
+            }
+          });
+        };
+        for (i = 0, len = includes.length; i < len; i++) {
+          include = includes[i];
+          fn(include);
+        }
       }
     };
     if (inf.options.file) {
