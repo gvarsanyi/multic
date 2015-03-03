@@ -27,32 +27,36 @@ Compile, Minify, Lint
 ## Pattern
     var multic = require('multic');
 
+    // with callback: function(err, res) {}
     multic(source|path[, options])[.file].coffee|css|es6|html|jade|sass[.css|html|js][.min](callback);
+
+    // with promise
+    var promise = multic(source|path[, options])[.file].coffee|css|es6|html|jade|sass[.css|html|js][.min]();
 
 ## Examples
 
 ### JavaScript string minification
-    multic(script, {file: 'my/file/name.js'}).js.min( function (err, res) {}) ;
+    var promise = multic(script, {file: 'my/file/name.js'}).js.min();
 
 ### Jade file->HTML compilation
-    multic('my/jade/file.jade').file.jade.html( function (err, res) {} );
+    var promise = multic('my/jade/file.jade').file.jade.html();
 
 ### Compile SASS file to CSS + minify
-    multic('my/sass/file.scss').file.sass.css.min( function (err, res) {} );
+    var promise = multic('my/sass/file.scss').file.sass.css.min();
 
 ### Jade to Angular module JavaScript
-    multic('my/sass/file.scss').file.sass.css.min( function (err, res) {
-      if (err) {
-        console.error(err);
-      } else {
-        console.log('source:', res.source);
-        console.log('compiled:', res.compiled);
-        console.log('minified:', res.minified);
-      }
+    var promise = multic('my/sass/file.scss').file.sass.css.min();
+    promise.then( function (res) {
+      console.log('source:', res.source);
+      console.log('compiled:', res.compiled);
+      console.log('minified:', res.minified);
+    }, function (err) {
+      console.error('error:', err);
+      console.error('response object is also available:', err.res);
     } );
 
 ### Lint only (syntax errors and warnings, no processing)
-    multic('my/js/file.js').file.js( function (err, res) { }
+    var promise = multic('my/js/file.js').file.js()
 
 
 ## Callback signiture
@@ -139,6 +143,10 @@ See the [comprehensive table of lint rules](docs/lint-rules.md))
 - html: [htmllint](https://www.npmjs.com/package/htmllint)
 - js & es6: [jshint](https://www.npmjs.com/package/jshint)
 
+## Promises
+Used library: [promise](https://www.npmjs.com/package/promise)
+
 # Coming soon (TODO)
+- Missing lint rule implementations and tests, added descriptions and links for rules
 - Output to file
-- Missing lint rule implementations, added descriptions and links for rules
+- CLI

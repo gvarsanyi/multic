@@ -31,34 +31,34 @@ module.exports = function(src, options) {
       var base, base1, ffn, sfn;
       if (iface[source_type] == null) {
         iface[source_type] = function(cb) {
-          return inf.process(0, source_type, source_type, cb);
+          return inf.start(0, source_type, source_type, cb);
         };
       }
       if ((base = iface.file)[source_type] == null) {
         base[source_type] = function(cb) {
-          return inf.process(READ, source_type, source_type, cb);
+          return inf.start(READ, source_type, source_type, cb);
         };
       }
       sfn = (iface[source_type] != null ? iface[source_type] : iface[source_type] = {})[target_type] = function(cb) {
         if (target_type === 'min') {
-          return inf.process(MINIFY, source_type, source_type, cb);
+          return inf.start(MINIFY, source_type, source_type, cb);
         }
-        return inf.process(COMPILE, source_type, target_type, cb);
+        return inf.start(COMPILE, source_type, target_type, cb);
       };
       if (target_type !== 'min') {
         sfn.min = function(cb) {
-          return inf.process(COMPILE | MINIFY(source_type, target_type, cb));
+          return inf.start(COMPILE | MINIFY, source_type, target_type, cb);
         };
       }
       ffn = ((base1 = iface.file)[source_type] != null ? base1[source_type] : base1[source_type] = {})[target_type] = function(cb) {
         if (target_type === 'min') {
-          return inf.process(READ | MINIFY(source_type, source_type, cb));
+          return inf.start(READ | MINIFY, source_type, source_type, cb);
         }
-        return inf.process(READ | COMPILE, source_type, target_type, cb);
+        return inf.start(READ | COMPILE, source_type, target_type, cb);
       };
       if (target_type !== 'min') {
         return ffn.min = function(cb) {
-          return inf.process(READ | COMPILE | MINIFY, source_type, target_type, cb);
+          return inf.start(READ | COMPILE | MINIFY, source_type, target_type, cb);
         };
       }
     };
