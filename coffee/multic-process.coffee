@@ -3,13 +3,12 @@ Promise = null # require 'promise'
 fs      = require 'fs'
 path    = require 'path'
 
-REQUESTED  = 1
-PROCESSING = 2
-FINISHED   = 3
 
 READ    = 1
 COMPILE = 2
 MINIFY  = 4
+WRITE   = 8
+LINT    = 128
 
 
 class MulticProcess
@@ -19,8 +18,9 @@ class MulticProcess
   promiseReject:  null # (function)
   promiseResolve: null # (function)
   res:            null # (Object) result of processing (to be returned)
-  req:            null # (Object) request statuses: read, lint, compile, minify
   source:         null # (string) source (or: source file path -> options.file)
+  todo:           LINT # (number) bitwise todo: READ(1), COMPILE(2), MINIFY(4),
+                       # WRITE(8), LINT(128)
 
 
   constructor: (@source, @options={}) ->
@@ -44,31 +44,27 @@ class MulticProcess
       includes: []
       warnings: []
 
-    @req =
-      # read:    REQUESTED
-      lint:    REQUESTED
-      # compile: REQUESTED
-      # minify:  REQUESTED
-
-
-  start: (todo, source_type, target_type, callback) =>
+  start: (todo, source_type, target_type, callback, target) =>
     # catch repetition, set up tasks, types, save promise/callback handler
     if @promiseResolve or @callback
       throw new Error 'Duplicate processing is forbidden'
 
     if callback? and typeof callback isnt 'function'
-      throw new Error 'Argument #1 (only argument) must be a callback function'
+      arg_id = ' (argument #' + (if (todo & WRITE) then 2 else 1) + ')'
+      throw new Error '`callback`' + arg_id + ' must be a callback function'
+
+    if (todo & WRITE)
+      if (typeof target isnt 'string' or not target)
+        throw new Error '`target` (argument #1) must be a string with value ' +
+                        'that specifies path for file output'
+      @target = target
+
     @callback = callback
 
     @sourceType = source_type
     @targetType = target_type
 
-    if todo & READ
-      @req.read = REQUESTED
-    if todo & COMPILE
-      @req.compile = REQUESTED
-    if todo & MINIFY
-      @req.minify = REQUESTED
+    @todo += todo
 
     if @callback # no promise if callback function is used
       @process()
@@ -95,38 +91,42 @@ class MulticProcess
     if @res.errors.length
       return finish()
 
-    if @req.read is REQUESTED
-      @req.read = PROCESSING
+    if @todo & READ
+      @todo -= READ
       @options.file = path.resolve @source
       return fs.readFile @options.file, {encoding: 'utf8'}, (err, code) =>
         if err
           @res.errors.push err
         @source = @res.source = code or ''
-        @req.read = FINISHED
         @process()
 
-    if @req.lint is REQUESTED
-      @req.lint = PROCESSING
+    if @todo & LINT
+      @todo -= LINT
       return require('./linter/' + @sourceType) @, =>
-        @req.lint = FINISHED
         @process()
 
-    if @req.compile is REQUESTED
-      @req.compile = PROCESSING
+    if @todo & COMPILE
+      @todo -= COMPILE
       return require('./compiler/' + @sourceType + '-' + @targetType) @, =>
-        @req.compile = FINISHED
         unless typeof @res.compiled is 'string'
           @res.compiled = ''
         @process()
 
-    if @req.minify is REQUESTED
-      @req.minify = PROCESSING
+    if @todo & MINIFY
+      @todo -= MINIFY
       if @res.compiled?
         @source = @res.compiled
       return require('./minifier/' + @targetType) @, =>
-        @req.minify = FINISHED
         unless typeof @res.minified is 'string'
           @res.minified = ''
+        @process()
+
+    if @todo & WRITE
+      @todo -= WRITE
+      data = @res.minified or @res.compiled
+      return fs.writeFile @target, data, {encoding: 'utf8'}, (err) =>
+        if err
+          @res.errors.push err
         @process()
 
     finish()

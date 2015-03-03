@@ -27,11 +27,14 @@ Compile, Minify, Lint
 ## Pattern
     var multic = require('multic');
 
-    // with callback: function(err, res) {}
+    // with promise
+    var promise = multic(source|path[, options])[.file].coffee|css|es6|html|jade|sass[.css|html|js][.min][.write]([target_file]);
+
+    // with callback function(err, res) {}
     multic(source|path[, options])[.file].coffee|css|es6|html|jade|sass[.css|html|js][.min](callback);
 
-    // with promise
-    var promise = multic(source|path[, options])[.file].coffee|css|es6|html|jade|sass[.css|html|js][.min]();
+    // write to output file with callback
+    multic(source|path[, options])[.file].coffee|css|es6|html|jade|sass[.css|html|js][.min].write(target_file, callback);
 
 ## Examples
 
@@ -41,8 +44,8 @@ Compile, Minify, Lint
 ### Jade file->HTML compilation
     var promise = multic('my/jade/file.jade').file.jade.html();
 
-### Compile SASS file to CSS + minify
-    var promise = multic('my/sass/file.scss').file.sass.css.min();
+### Compile SASS file to CSS + minify + write to output file
+    var promise = multic('my/sass/file.scss').file.sass.css.min.write('my/deployment/dist.min.css');
 
 ### Jade to Angular module JavaScript
     var promise = multic('my/sass/file.scss').file.sass.css.min();
@@ -124,7 +127,7 @@ Define Angular module name for your markup.
     multic(source_string, {moduleName: 'name.space.joe'}).html.js(callback);
 
 ### Configurable lint rules
-See the [comprehensive table of lint rules](docs/lint-rules.md))
+See [table of lint rules](docs/lint-rules.md)
 
     multic(source_file_path, {
       max_line_length:  80,
@@ -148,5 +151,4 @@ Used library: [promise](https://www.npmjs.com/package/promise)
 
 # Coming soon (TODO)
 - Missing lint rule implementations and tests, added descriptions and links for rules
-- Output to file
 - CLI

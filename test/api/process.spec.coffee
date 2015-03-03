@@ -21,7 +21,7 @@ function x(a) {
 """
 
 
-describe 'Processing pathes', ->
+describe 'Processing (without write)', ->
 
   it 'multic(source).coffee(cb)', (done) ->
 
@@ -150,9 +150,9 @@ describe 'Processing pathes', ->
 
   it 'multic(source).file.js.min(cb)', (done) ->
     mkdirp 'tmp/', {mode: '0777'}, ->
-      fs.writeFile 'tmp/api.js', js_code, (err) ->
+      fs.writeFile 'tmp/api4.js', js_code, (err) ->
 
-        multic('tmp/api.js').file.js.min async done, (err, res) ->
+        multic('tmp/api4.js').file.js.min async done, (err, res) ->
 
           expect(err)
           .not.to.be.ok
