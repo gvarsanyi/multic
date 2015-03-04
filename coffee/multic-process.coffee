@@ -44,52 +44,53 @@ class MulticProcess
       includes: []
       warnings: []
 
-  start: (todo, source_type, target_type, callback, target) =>
+
+  start: (@todo, @sourceType, @targetType, callback, @target) =>
+
     # catch repetition, set up tasks, types, save promise/callback handler
     if @promiseResolve or @callback
       throw new Error 'Duplicate processing is forbidden'
 
-    if callback? and typeof callback isnt 'function'
-      arg_id = ' (argument #' + (if (todo & WRITE) then 2 else 1) + ')'
+    if (@callback = callback)? and typeof @callback isnt 'function'
+      arg_id = ' (argument #' + (if (@todo & WRITE) then 2 else 1) + ')'
       throw new Error '`callback`' + arg_id + ' must be a callback function'
 
-    if (todo & WRITE)
-      if (typeof target isnt 'string' or not target)
+    if (@todo & WRITE)
+      if (typeof @target isnt 'string' or not @target)
         throw new Error '`target` (argument #1) must be a string with value ' +
                         'that specifies path for file output'
-      @target = target
 
-    @callback = callback
+    @todo = @todo | LINT # linting is mandatory
 
-    @sourceType = source_type
-    @targetType = target_type
-
-    @todo += todo
+    proxied = MulticProcess.clusterProxy? @
 
     if @callback # no promise if callback function is used
-      @process()
+      unless proxied
+        @process()
       return
 
     Promise ?= require 'promise'
     new Promise (@promiseResolve, @promiseReject) =>
-      @process()
+      unless proxied
+        @process()
+
+
+  finish: =>
+    err = @res.errors[0] or null
+
+    if @callback
+      @callback err, @res
+    else if err
+      err.res = @res
+      @promiseReject err
+    else
+      @promiseResolve @res
+    return
 
 
   process: =>
-    finish = =>
-      err = @res.errors[0] or null
-
-      if @callback
-        @callback err, @res
-      else if err
-        err.res = @res
-        @promiseReject err
-      else
-        @promiseResolve @res
-      return
-
     if @res.errors.length
-      return finish()
+      return @finish()
 
     if @todo & READ
       @todo -= READ
@@ -129,7 +130,7 @@ class MulticProcess
           @res.errors.push err
         @process()
 
-    finish()
+    @finish()
 
 
 module.exports = MulticProcess

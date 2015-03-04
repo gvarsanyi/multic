@@ -135,6 +135,22 @@ See [table of lint rules](docs/lint-rules.md)
       // ...
     }).file.min(callback);
 
+### Cluster for daemons
+If you create a daemon or long-running process (like a file watcher) that does NOT have its own cluster, you may want to turn the *cluster* feature.
+
+    multic.cluster(); // triggers creating the cluster
+
+This will create workers (a minimum of 4, maximum of the number of CPU cores/threads) and utilize them transparently for *multic* processing tasks.
+
+WARNING! You will have to stop the cluster so that your process can exit gracefully:
+
+    multic.stopCluster(function () {
+      console.log('Cluster has been stopped');
+    });
+
+You may only stop the cluster once (no cluster-restarting). *multic* will keep functioning on the main process.
+
+
 # Utilized minifiers
 - html: [html-minifier](https://www.npmjs.com/package/html-minifier)
 - javascript: [uglify-js](https://www.npmjs.com/package/uglify-js)

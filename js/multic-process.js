@@ -37,6 +37,7 @@ MulticProcess = (function() {
     this.source = source;
     this.options = options != null ? options : {};
     this.process = bind(this.process, this);
+    this.finish = bind(this.finish, this);
     this.start = bind(this.start, this);
     if (!(typeof this.source === 'string' && this.source)) {
       throw new Error('Argument #1 `source` must be string type: source or ' + 'source file path');
@@ -57,27 +58,30 @@ MulticProcess = (function() {
     };
   }
 
-  MulticProcess.prototype.start = function(todo, source_type, target_type, callback, target) {
-    var arg_id;
+  MulticProcess.prototype.start = function(todo, sourceType, targetType, callback, target) {
+    var arg_id, proxied;
+    this.todo = todo;
+    this.sourceType = sourceType;
+    this.targetType = targetType;
+    this.target = target;
     if (this.promiseResolve || this.callback) {
       throw new Error('Duplicate processing is forbidden');
     }
-    if ((callback != null) && typeof callback !== 'function') {
-      arg_id = ' (argument #' + (todo & WRITE ? 2 : 1) + ')';
+    if (((this.callback = callback) != null) && typeof this.callback !== 'function') {
+      arg_id = ' (argument #' + (this.todo & WRITE ? 2 : 1) + ')';
       throw new Error('`callback`' + arg_id + ' must be a callback function');
     }
-    if (todo & WRITE) {
-      if (typeof target !== 'string' || !target) {
+    if (this.todo & WRITE) {
+      if (typeof this.target !== 'string' || !this.target) {
         throw new Error('`target` (argument #1) must be a string with value ' + 'that specifies path for file output');
       }
-      this.target = target;
     }
-    this.callback = callback;
-    this.sourceType = source_type;
-    this.targetType = target_type;
-    this.todo += todo;
+    this.todo = this.todo | LINT;
+    proxied = typeof MulticProcess.clusterProxy === "function" ? MulticProcess.clusterProxy(this) : void 0;
     if (this.callback) {
-      this.process();
+      if (!proxied) {
+        this.process();
+      }
       return;
     }
     if (Promise == null) {
@@ -87,29 +91,30 @@ MulticProcess = (function() {
       return function(promiseResolve, promiseReject) {
         _this.promiseResolve = promiseResolve;
         _this.promiseReject = promiseReject;
-        return _this.process();
+        if (!proxied) {
+          return _this.process();
+        }
       };
     })(this));
   };
 
+  MulticProcess.prototype.finish = function() {
+    var err;
+    err = this.res.errors[0] || null;
+    if (this.callback) {
+      this.callback(err, this.res);
+    } else if (err) {
+      err.res = this.res;
+      this.promiseReject(err);
+    } else {
+      this.promiseResolve(this.res);
+    }
+  };
+
   MulticProcess.prototype.process = function() {
-    var data, finish;
-    finish = (function(_this) {
-      return function() {
-        var err;
-        err = _this.res.errors[0] || null;
-        if (_this.callback) {
-          _this.callback(err, _this.res);
-        } else if (err) {
-          err.res = _this.res;
-          _this.promiseReject(err);
-        } else {
-          _this.promiseResolve(_this.res);
-        }
-      };
-    })(this);
+    var data;
     if (this.res.errors.length) {
-      return finish();
+      return this.finish();
     }
     if (this.todo & READ) {
       this.todo -= READ;
@@ -173,7 +178,7 @@ MulticProcess = (function() {
         };
       })(this));
     }
-    return finish();
+    return this.finish();
   };
 
   return MulticProcess;
