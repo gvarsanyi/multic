@@ -1,6 +1,6 @@
 {
   "name": "multic",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "description": "converged linter, compiler and minifier API for multiple web sources: jade, html, sass/scss, css, coffee-script, es6/6to5/babel, javascript/es5, html2js",
   "main": "js/multic.js",
   "scripts": {

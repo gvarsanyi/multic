@@ -102,6 +102,7 @@ MulticProcess.clusterProxy = function(inf) {
     return false;
   }
   worker_list.push(worker = worker_list.shift());
+  req_id += 1;
   callbacks[req_id] = (function(_this) {
     return function(err, res) {
       var key, l, len, len1, len2, m, n, node, node_key, ref1, ref2, ref3, ref4, value;
@@ -136,7 +137,6 @@ MulticProcess.clusterProxy = function(inf) {
       return inf.finish();
     };
   })(this);
-  req_id += 1;
   worker.send({
     req: 'process',
     reqId: req_id,

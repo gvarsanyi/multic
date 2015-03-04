@@ -84,6 +84,8 @@ MulticProcess.clusterProxy = (inf) ->
 
   # console.log 'PROXIED!', '#' + worker.id, worker_list.length
 
+  req_id += 1
+
   callbacks[req_id] = (err, res) =>
 
     for key in ['source', 'compiled', 'minified'] when res[key]?
@@ -101,7 +103,6 @@ MulticProcess.clusterProxy = (inf) ->
 
     inf.finish()
 
-  req_id += 1
   worker.send
     req:        'process'
     reqId:      req_id

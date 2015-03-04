@@ -20,12 +20,15 @@ describe 'Cluster/Performance', ->
     expect(MulticProcess.clusterProxy)
     .to.be.undefined
 
+    count = 0
     flush = (n) ->
       tx = (new Date).getTime()
       for i in [0 ... n]
         do (i) ->
           t0 = (new Date).getTime()
           multic(code).coffee.js.min (err, req) ->
+
+            count += 1
 
             expect(req.compiled and req.minified)
             .to.be.ok
@@ -34,6 +37,9 @@ describe 'Cluster/Performance', ->
             .to.be.instanceOf Error
 
             if i is n - 1
+              expect(count)
+              .to.equal n
+
               done()
 
     flush 1000
@@ -53,12 +59,15 @@ describe 'Cluster/Performance', ->
     expect(typeof MulticProcess.clusterProxy)
     .to.equal 'function'
 
+    count = 0
     flush = (n) ->
       tx = (new Date).getTime()
       for i in [0 ... n]
         do (i) ->
           t0 = (new Date).getTime()
           multic(code).coffee.js.min (err, req) ->
+
+            count += 1
 
             expect(req.compiled and req.minified)
             .to.be.ok
@@ -67,6 +76,9 @@ describe 'Cluster/Performance', ->
             .to.be.instanceOf Error
 
             if i is n - 1
+              expect(count)
+              .to.equal n
+
               done()
 
     flush 1000
@@ -82,12 +94,15 @@ describe 'Cluster/Performance', ->
     expect(typeof MulticProcess.clusterProxy)
     .to.equal 'function'
 
+    count = 0
     flush = (n) ->
       tx = (new Date).getTime()
       for i in [0 ... n]
         do (i) ->
           t0 = (new Date).getTime()
           multic(code).coffee.js.min (err, req) ->
+
+            count += 1
 
             expect(req.compiled and req.minified)
             .to.be.ok
@@ -96,6 +111,9 @@ describe 'Cluster/Performance', ->
             .to.be.instanceOf Error
 
             if i is n - 1
+              expect(count)
+              .to.equal n
+
               done()
 
     flush 1000
@@ -119,12 +137,15 @@ describe 'Cluster/Performance', ->
     expect(MulticProcess.clusterProxy)
     .to.be.undefined
 
+    count = 0
     flush = (n) ->
       tx = (new Date).getTime()
       for i in [0 ... n]
         do (i) ->
           t0 = (new Date).getTime()
           multic(code).coffee.js.min (err, req) ->
+
+            count += 1
 
             expect(req.compiled and req.minified)
             .to.be.ok
@@ -133,6 +154,9 @@ describe 'Cluster/Performance', ->
             .to.be.instanceOf Error
 
             if i is n - 1
+              expect(count)
+              .to.equal n
+
               done()
 
     flush 1000
