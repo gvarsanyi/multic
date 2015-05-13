@@ -19,7 +19,7 @@ class MulticProcess
   promiseResolve: null # (function)
   res:            null # (Object) result of processing (to be returned)
   source:         null # (string) source (or: source file path -> options.file)
-  todo:           LINT # (number) bitwise todo: READ(1), COMPILE(2), MINIFY(4),
+  todo:           0    # (number) bitwise todo: READ(1), COMPILE(2), MINIFY(4),
                        # WRITE(8), LINT(128)
 
 
@@ -60,7 +60,8 @@ class MulticProcess
         throw new Error '`target` (argument #1) must be a string with value ' +
                         'that specifies path for file output'
 
-    @todo = @todo | LINT # linting is mandatory
+    unless @options.lint is false
+        @todo = @todo | LINT
 
     proxied = MulticProcess.clusterProxy? @
 

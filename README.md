@@ -135,6 +135,11 @@ See [table of lint rules](docs/lint-rules.md)
       // ...
     }).file.min(callback);
 
+### Turn off linting
+Pass `{lint: false}` option explicitly to disable linting.
+
+    multic(source, {lint: false}).js.min(callback);
+
 ### Cluster for daemons
 If you create a daemon or long-running process (like a file watcher) that does NOT have its own cluster, you may want to turn the *cluster* feature.
 
