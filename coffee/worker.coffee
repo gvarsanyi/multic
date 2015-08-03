@@ -1,14 +1,13 @@
 
 MulticProcess = require './multic-process'
-# cluster       = require 'cluster'
 fs            = require 'fs'
 
 # async prefetch modules
 do ->
   all_processors =
-    linter:   ['coffee', 'css', 'es6', 'html', 'jade', 'js', 'sass']
+    linter:   ['coffee', 'css', 'es6', 'html', 'jade', 'js', 'less', 'sass']
     compiler: ['coffee-js', 'es6-js', 'html-js', 'jade-html', 'jade-js',
-              'sass-css']
+               'less-css', 'sass-css']
     minifier: ['css', 'html', 'js']
 
   list = []
@@ -37,21 +36,3 @@ do ->
     if mod = list.pop()
       require mod
       setTimeout fetch, 10
-#     else
-#       console.log '[worker #' + cluster.worker.id + '] all required in',
-#                   (new Date).getTime() - t0
-
-
-process.on 'message', (msg) ->
-#   console.log '[worker #' + cluster.worker.id + ']', msg
-
-  cb = (err, res) ->
-#     console.log '[worker #' + cluster.worker.id + '] processed'
-    process.send {req: 'processed', reqId: msg.reqId, err, res}
-
-  processor = new MulticProcess msg.source, msg.options
-  processor._worker = true
-  processor.start msg.todo, msg.sourceType, msg.targetType, cb, msg.target
-
-
-process.send {req: 'ready'}

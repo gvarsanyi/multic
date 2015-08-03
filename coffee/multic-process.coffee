@@ -63,17 +63,12 @@ class MulticProcess
     unless @options.lint is false
         @todo = @todo | LINT
 
-    proxied = MulticProcess.clusterProxy? @
-
     if @callback # no promise if callback function is used
-      unless proxied
-        @process()
-      return
+      return @process()
 
     Promise ?= require 'promise'
     new Promise (@promiseResolve, @promiseReject) =>
-      unless proxied
-        @process()
+      @process()
 
 
   finish: =>

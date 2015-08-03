@@ -12,47 +12,47 @@ module.exports = (inf, cb) ->
     return cb()
 
   try
-    stats = {}
 
-    pathes = []
     opts =
       data:         inf.source
-      includePaths: pathes
-      stats:        stats
-
-      error: (err) ->
-        pos = CompilationError.parsePos err.line, err.column, -1, -1
-        inf.res.errors.push new CompilationError inf, err, pos
-        cb()
-
-      success: (res) ->
-        if (includes = res?.stats?.includedFiles)?.length
-          inf.res.includes.push includes...
-
-        # node-sass does not seem to support warnings
-
-        inf.res.compiled = res.css
-
-        unless inf.includeSources and typeof inf.includeSources is 'object' and
-        includes?.length
-          return cb()
-        loaded = 0
-        for include in includes
-          do (include) ->
-            fs.readFile include, {encoding: 'utf8'}, (err, data) ->
-              if typeof data is 'string' and not err
-                inf.includeSources[include] = data
-              loaded += 1
-              if loaded >= includes.length
-                cb()
-        return
+      includePaths: []
 
     if inf.options.file
       opts.file = inf.options.file
-      pathes.push path.resolve path.dirname(inf.options.file) + '/'
+      opts.includePaths.push path.resolve path.dirname(inf.options.file) + '/'
 
-    NodeSass.render opts
+
+    NodeSass.render opts, (err, res) ->
+
+      if err
+        pos = CompilationError.parsePos err.line, err.column, -1, -1
+        inf.res.errors.push new CompilationError inf, err, pos
+        return cb()
+
+      if (includes = res?.stats?.includedFiles)?.length
+        inf.res.includes.push includes...
+
+      # node-sass does not seem to support warnings
+
+      inf.res.compiled = res.css.toString()
+
+      unless inf.includeSources and typeof inf.includeSources is 'object' and
+      includes?.length
+        return cb()
+      loaded = 0
+
+      for include in includes
+        do (include) ->
+          fs.readFile include, {encoding: 'utf8'}, (err, data) ->
+            if typeof data is 'string' and not err
+              inf.includeSources[include] = data
+            loaded += 1
+            if loaded >= includes.length
+              return cb()
+
+      return
 
   catch err
+
     inf.res.errors.push new CompilationError inf, err
     cb()

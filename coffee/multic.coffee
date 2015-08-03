@@ -14,6 +14,7 @@ source_to_target_types =
   html:   ['js', 'min']
   jade:   ['html', 'js']
   js:     ['min']
+  less:   ['css']
   sass:   ['css']
 
 
@@ -90,11 +91,3 @@ module.exports = (src, options) ->
             fn READ|COMPILE|MINIFY|WRITE, source_type, target_type, cb, target
 
   iface
-
-
-cluster = null
-module.exports.cluster = ->
-  cluster = require './cluster'
-
-module.exports.stopCluster = (cb) ->
-  cluster.stop cb

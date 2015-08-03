@@ -10,9 +10,10 @@ Compile, Minify, Lint
 # Supported sources
 - [Jade](http://jade-lang.com/)
 - HTML
+- [LESS](http://lesscss.org/)
 - [SASS](http://sass-lang.com/) via [libsass](https://github.com/sass/libsass) / [node-sass](https://www.npmjs.com/package/node-sass)
 - CSS
-- [Coffee script](http://coffeescript.org/)
+- [CoffeeScript](http://coffeescript.org/)
 - ECMAScript6 via [Babel](http://babeljs.io/) (ex: 6to5)
 - JavaScript
 - [Angular](https://angularjs.org/) module scripts from HTML/JADE templates via [ng-html2js](https://www.npmjs.com/package/ng-html2js)
@@ -28,13 +29,13 @@ Compile, Minify, Lint
     var multic = require('multic');
 
     // with promise
-    var promise = multic(source|path[, options])[.file].coffee|css|es6|html|jade|sass[.css|html|js][.min][.write]([target_file]);
+    var promise = multic(source|path[, options])[.file].coffee|css|es6|html|jade|less|sass[.css|html|js][.min][.write]([target_file]);
 
     // with callback function(err, res) {}
-    multic(source|path[, options])[.file].coffee|css|es6|html|jade|sass[.css|html|js][.min](callback);
+    multic(source|path[, options])[.file].coffee|css|es6|html|jade|less|sass[.css|html|js][.min](callback);
 
     // write to output file with callback
-    multic(source|path[, options])[.file].coffee|css|es6|html|jade|sass[.css|html|js][.min].write(target_file, callback);
+    multic(source|path[, options])[.file].coffee|css|es6|html|jade|less|sass[.css|html|js][.min].write(target_file, callback);
 
 ## Examples
 
@@ -44,10 +45,16 @@ Compile, Minify, Lint
 ### Jade file->HTML compilation
     var promise = multic('my/jade/file.jade').file.jade.html();
 
+### Compile LESS file to CSS + write to output file
+    var promise = multic('my/sass/file.scss').file.less.css.write('my/deployment/dist.css');
+
 ### Compile SASS file to CSS + minify + write to output file
     var promise = multic('my/sass/file.scss').file.sass.css.min.write('my/deployment/dist.min.css');
 
-### Jade to Angular module JavaScript
+### Lint only (syntax errors and warnings, no processing)
+    var promise = multic('my/js/file.js').file.js()
+
+### Promise response
     var promise = multic('my/sass/file.scss').file.sass.css.min();
     promise.then( function (res) {
       console.log('source:', res.source);
@@ -57,9 +64,6 @@ Compile, Minify, Lint
       console.error('error:', err);
       console.error('response object is also available:', err.res);
     } );
-
-### Lint only (syntax errors and warnings, no processing)
-    var promise = multic('my/js/file.js').file.js()
 
 
 ## Callback signiture
@@ -79,7 +83,7 @@ Compile, Minify, Lint
 - __source__: *(string)* source code (if loaded from file)
 - __compiled__: *(string)* compiled, unminified code (on compilation requests)
 - __minified__: *(string)* minified code (on minification requests)
-- __includes__: *(Array)* of *(string)*s included files (only used for jade and sass files with includes/import)
+- __includes__: *(Array)* of *(string)*s included files (only used for Jade, Less and Sass files with includes/import)
 - __errors__: *(Array)* of *(Error)*-inherited objects
 - __warnings__: *(Array)* of *(Error)*-inherited objects
 
@@ -117,7 +121,7 @@ WARNING! Although these properties are available most of the time, keep in mind 
 
 ## Options
 ### `file` file path for source string
-This is useful for error messages and to define include path start point for jade and sass includes/imports
+This is useful for error messages and to define include path start point for Jade, Less and Sass includes/imports
 
     multic(source_string, {file: '*path/to/my/source/file.ext*'}).min(callback);
 
@@ -139,22 +143,6 @@ See [table of lint rules](docs/lint-rules.md)
 Pass `{lint: false}` option explicitly to disable linting.
 
     multic(source, {lint: false}).js.min(callback);
-
-### Cluster for daemons
-If you create a daemon or long-running process (like a file watcher) that does NOT have its own cluster, you may want to turn the *cluster* feature.
-
-    multic.cluster(); // triggers creating the cluster
-
-This will create workers (a minimum of 4, maximum of the number of CPU cores/threads) and utilize them transparently for *multic* processing tasks.
-
-WARNING! You will have to stop the cluster so that your process can exit gracefully:
-
-    multic.stopCluster(function () {
-      console.log('Cluster has been stopped');
-    });
-
-You may only stop the cluster once (no cluster-restarting). *multic* will keep functioning on the main process.
-
 
 # Utilized minifiers
 - html: [html-minifier](https://www.npmjs.com/package/html-minifier)

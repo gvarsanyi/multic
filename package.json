@@ -1,25 +1,26 @@
 {
   "name": "multic",
-  "version": "0.5.4",
-  "description": "converged linter, compiler and minifier API for multiple web sources: jade, html, sass/scss, css, coffee-script, es6/6to5/babel, javascript/es5, html2js",
+  "version": "0.6.0",
+  "description": "converged linter, compiler and minifier API for multiple web sources: jade, html, less/sass/scss, css, coffee-script, es6/6to5/babel, javascript/es5, html2js",
   "main": "js/multic.js",
   "scripts": {
     "test": "make test"
   },
   "dependencies": {
-    "babel": "^5.3.2",
-    "clean-css": "^3.2.9",
-    "coffee-script": "^1.9.2",
-    "coffeelint": "^1.9.6",
+    "babel": "^5.8.20",
+    "clean-css": "^3.3.7",
+    "coffee-script": "^1.9.3",
+    "coffeelint": "^1.10.1",
     "csslint": "^0.10.0",
     "html-minifier": "^0.7.2",
-    "htmllint": "^0.2.4",
-    "jade": "^1.9.2",
-    "jshint": "^2.7.0",
+    "htmllint": "^0.2.5",
+    "jade": "^1.11.0",
+    "jshint": "^2.8.0",
+    "less": "^2.5.1",
     "ng-html2js": "^2.0.0",
-    "node-sass": "^3.1.0",
-    "promise": "^7.0.1",
-    "uglify-js": "^2.4.21"
+    "node-sass": "^3.2.0",
+    "promise": "^7.0.3",
+    "uglify-js": "^2.4.24"
   },
   "repository": {
     "type": "git",
@@ -31,6 +32,7 @@
     "jade",
     "html",
     "css",
+    "less",
     "scss",
     "sass",
     "coffee",
@@ -56,8 +58,8 @@
   },
   "homepage": "https://github.com/gvarsanyi/multic",
   "devDependencies": {
-    "chai": "^2.3.0",
-    "mkdirp": "^0.5.0",
-    "mocha": "^2.2.4"
+    "chai": "^3.2.0",
+    "mkdirp": "^0.5.1",
+    "mocha": "^2.2.5"
   }
 }
